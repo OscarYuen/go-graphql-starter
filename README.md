@@ -1,0 +1,1 @@
+** This example is integrated with gorm and graphql-go

@@ -1,9 +1,11 @@
 package main
 
 import (
+	"./conf"
+	"./model"
+	"./schema"
 	"log"
 	"net/http"
-	"./schema"
 
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
@@ -12,10 +14,15 @@ import (
 var gschema *graphql.Schema
 
 func init() {
-	gschema = graphql.MustParseSchema(schema.Schema, &schema.Resolver{})
+	gschema = graphql.MustParseSchema(schema.GetRootSchema(), &schema.Resolver{})
 }
 
 func main() {
+	db := conf.ConnectDB()
+	schema.SetDatabase(db)
+	// Migrate the schema
+	db.AutoMigrate(&model.User{})
+
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
 	}))
