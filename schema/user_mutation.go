@@ -12,6 +12,7 @@ func (r *Resolver) CreateUser(args *struct {
 		Email:    args.Email,
 		Password: args.Password,
 	}
+	user.HashedPassword()
 	if err := DB.Create(user).Error; err != nil {
 		return nil, err
 	}

@@ -1,2 +1,4 @@
 # IDE
 .idea/
+
+*.exe
