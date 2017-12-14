@@ -1,9 +1,9 @@
 package main
 
 import (
-	"./conf"
-	"./model"
-	"./schema"
+	"github.com/OscarYuen/go-graphql-example/conf"
+	"github.com/OscarYuen/go-graphql-example/model"
+	"github.com/OscarYuen/go-graphql-example/schema"
 	"log"
 	"net/http"
 
