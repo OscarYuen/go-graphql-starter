@@ -5,13 +5,14 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-func ConnectDB(path string) *gorm.DB {
+var DB *gorm.DB
+
+func ConnectDB(path string) {
 	db, err := gorm.Open("sqlite3", path)
 	if err != nil {
 		panic(err)
 	}
 
 	db.LogMode(true)
-
-	return db
+	DB = db
 }

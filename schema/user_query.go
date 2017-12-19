@@ -1,7 +1,10 @@
 package schema
 
 import (
-	"github.com/OscarYuen/go-graphql-example/model"
+	"../conf"
+	"../model"
+	"../repository"
+	"fmt"
 )
 
 var userQuery = `
@@ -12,9 +15,10 @@ func (r *Resolver) FindUserByEmail(args struct {
 	Email string
 }) (*userResolver, error) {
 	user := &model.User{}
-	result := DB.Where("email = ?", args.Email).First(user)
+	result := repository.BaseRepository{DB: conf.DB}.Read(user, "9")
 	if err := result.Error; err != nil {
 		return nil, err
 	}
+	fmt.Printf("%v", result)
 	return &userResolver{user}, nil
 }

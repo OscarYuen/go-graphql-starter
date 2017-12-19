@@ -1,11 +1,9 @@
 package schema
 
 import (
-	"github.com/jinzhu/gorm"
 	"bytes"
 )
 
-var DB *gorm.DB
 var Schema = `
 	schema {
 		query: Query
@@ -23,10 +21,6 @@ func GetRootSchema() string {
 	buffer.WriteString(`}`)
 	buffer.WriteString(userSchema)
 	return buffer.String()
-}
-
-func SetDatabase(db *gorm.DB) {
-	DB = db
 }
 
 type Resolver struct{}

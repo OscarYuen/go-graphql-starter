@@ -4,16 +4,14 @@ import (
 	"testing"
 
 	"../conf"
-	"github.com/OscarYuen/go-graphql-example/schema"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/gqltesting"
 )
 
-var rootSchema = graphql.MustParseSchema(schema.GetRootSchema(), &schema.Resolver{})
-var db = conf.ConnectDB("../test.db")
+var rootSchema = graphql.MustParseSchema(GetRootSchema(), &Resolver{})
 
 func init() {
-	schema.SetDatabase(db)
+	conf.ConnectDB("../test.db")
 }
 
 func TestBasic(t *testing.T) {

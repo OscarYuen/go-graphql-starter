@@ -1,9 +1,9 @@
 package model
 
 import (
-	"time"
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"time"
 )
 
 type User struct {
@@ -13,7 +13,7 @@ type User struct {
 	CreatedAt *time.Time
 }
 
-func (user *User) HashedPassword()  {
+func (user *User) HashedPassword() {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Fatal(err)

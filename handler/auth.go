@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 )
 
 func Authenticate(h http.Handler) http.Handler {

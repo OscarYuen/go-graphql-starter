@@ -1,10 +1,10 @@
 package main
 
 import (
-	"./handler"
 	"./conf"
-	"github.com/OscarYuen/go-graphql-example/model"
-	"github.com/OscarYuen/go-graphql-example/schema"
+	"./handler"
+	"./model"
+	"./schema"
 	"log"
 	"net/http"
 
@@ -19,10 +19,9 @@ func init() {
 }
 
 func main() {
-	db := conf.ConnectDB("test.db")
-	schema.SetDatabase(db)
+	conf.ConnectDB("test.db")
 	// Migrate the schema
-	db.AutoMigrate(&model.User{})
+	conf.DB.AutoMigrate(&model.User{})
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)

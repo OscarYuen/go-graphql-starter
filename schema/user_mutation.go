@@ -1,7 +1,9 @@
 package schema
 
 import (
-	"github.com/OscarYuen/go-graphql-example/model"
+	"../conf"
+	"../model"
+	"../repository"
 	"golang.org/x/net/context"
 )
 
@@ -18,7 +20,8 @@ func (r *Resolver) CreateUser(ctx context.Context,args *struct {
 		Password: args.Password,
 	}
 	user.HashedPassword()
-	if err := DB.Create(user).Error; err != nil {
+	result := repository.BaseRepository{DB:conf.DB}.Create(user)
+	if  err := result.Error; err != nil {
 		return nil, err
 	}
 	return &userResolver{user}, nil

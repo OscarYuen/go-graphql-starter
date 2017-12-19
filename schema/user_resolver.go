@@ -1,7 +1,7 @@
 package schema
 
 import (
-	"github.com/OscarYuen/go-graphql-example/model"
+	"../model"
 	"strconv"
 )
 
