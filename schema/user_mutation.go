@@ -2,9 +2,14 @@ package schema
 
 import (
 	"github.com/OscarYuen/go-graphql-example/model"
+	"golang.org/x/net/context"
 )
 
-func (r *Resolver) CreateUser(args *struct {
+var userMutation = `
+	createUser(email: String!, password: String!): User
+`
+
+func (r *Resolver) CreateUser(ctx context.Context,args *struct {
 	Email    string
 	Password string
 }) (*userResolver, error) {

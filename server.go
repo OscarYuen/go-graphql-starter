@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/OscarYuen/go-graphql-example/conf"
+	"./handler"
+	"./conf"
 	"github.com/OscarYuen/go-graphql-example/model"
 	"github.com/OscarYuen/go-graphql-example/schema"
 	"log"
@@ -18,7 +19,7 @@ func init() {
 }
 
 func main() {
-	db := conf.ConnectDB()
+	db := conf.ConnectDB("test.db")
 	schema.SetDatabase(db)
 	// Migrate the schema
 	db.AutoMigrate(&model.User{})
@@ -27,7 +28,7 @@ func main() {
 		w.Write(page)
 	}))
 
-	http.Handle("/query", &relay.Handler{Schema: gschema})
+	http.Handle("/query", handler.Authenticate(&relay.Handler{Schema: gschema}))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
@@ -48,6 +49,9 @@ var page = []byte(`
 			function graphQLFetcher(graphQLParams) {
 				return fetch("/query", {
 					method: "post",
+					headers: {
+					 'Authorization': 'Basic',
+				   	},
 					body: JSON.stringify(graphQLParams),
 					credentials: "include",
 				}).then(function (response) {

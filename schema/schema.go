@@ -10,17 +10,17 @@ var Schema = `
 	schema {
 		query: Query
 		mutation: Mutation
-	}
-	type Query {
-		findUserByEmail(email: String!): User
-	}
-	type Mutation {
-		createUser(email: String!, password: String!): User
 	}`
 
 func GetRootSchema() string {
 	var buffer bytes.Buffer
 	buffer.WriteString(Schema)
+	buffer.WriteString(`type Query {`)
+	buffer.WriteString(userQuery)
+	buffer.WriteString(`}`)
+	buffer.WriteString(`type Mutation {`)
+	buffer.WriteString(userMutation)
+	buffer.WriteString(`}`)
 	buffer.WriteString(userSchema)
 	return buffer.String()
 }
