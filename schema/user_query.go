@@ -4,7 +4,6 @@ import (
 	"../conf"
 	"../model"
 	"../repository"
-	"fmt"
 )
 
 var userQuery = `
@@ -15,10 +14,10 @@ func (r *Resolver) FindUserByEmail(args struct {
 	Email string
 }) (*userResolver, error) {
 	user := &model.User{}
-	result := repository.BaseRepository{DB: conf.DB}.Read(user, "9")
+	rb := &repository.UserRepository{repository.BaseRepository{DB:conf.DB}}
+	result := rb.FindByEmail(user, args.Email)
 	if err := result.Error; err != nil {
 		return nil, err
 	}
-	fmt.Printf("%v", result)
 	return &userResolver{user}, nil
 }

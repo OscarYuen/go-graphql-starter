@@ -19,8 +19,8 @@ func (r *Resolver) CreateUser(ctx context.Context,args *struct {
 		Email:    args.Email,
 		Password: args.Password,
 	}
-	user.HashedPassword()
-	result := repository.BaseRepository{DB:conf.DB}.Create(user)
+	rb := &repository.UserRepository{repository.BaseRepository{DB:conf.DB}}
+	result := rb.CreateUser(user)
 	if  err := result.Error; err != nil {
 		return nil, err
 	}
