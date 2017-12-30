@@ -1,9 +1,9 @@
 package schema
 
 import (
-	"../conf"
+	//"../conf"
 	"../model"
-	"../repository"
+	//"../service"
 	"golang.org/x/net/context"
 )
 
@@ -19,10 +19,10 @@ func (r *Resolver) CreateUser(ctx context.Context,args *struct {
 		Email:    args.Email,
 		Password: args.Password,
 	}
-	rb := &repository.UserRepository{repository.BaseRepository{DB:conf.DB}}
-	result := rb.CreateUser(user)
-	if  err := result.Error; err != nil {
-		return nil, err
-	}
+	//rb := &repository.UserRepository{repository.BaseRepository{DB:conf.DB}}
+	//result := rb.CreateUser(user)
+	//if  err := result.Error; err != nil {
+	//	return nil, err
+	//}
 	return &userResolver{user}, nil
 }

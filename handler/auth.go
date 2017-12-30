@@ -3,9 +3,10 @@ package handler
 import (
 	"log"
 	"net/http"
+	"golang.org/x/net/context"
 )
 
-func Authenticate(h http.Handler) http.Handler {
+func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("Authorization")
 		log.Print(tokenString)
@@ -13,6 +14,6 @@ func Authenticate(h http.Handler) http.Handler {
 			http.Error(w, "Invalid Token", http.StatusUnauthorized)
 			return
 		}
-		h.ServeHTTP(w, r)
+		h.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
