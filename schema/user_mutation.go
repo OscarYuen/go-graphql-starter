@@ -24,10 +24,5 @@ func (r *Resolver) CreateUser(ctx context.Context,args *struct {
 	if err != nil {
 		return nil, err
 	}
-	//rb := &repository.UserRepository{repository.BaseRepository{DB:conf.DB}}
-	//result := rb.CreateUser(user)
-	//if  err := result.Error; err != nil {
-	//	return nil, err
-	//}
 	return &userResolver{user}, nil
 }

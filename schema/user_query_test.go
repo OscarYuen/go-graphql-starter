@@ -5,7 +5,7 @@ import (
 	"../config"
 	"../service"
 	"github.com/neelance/graphql-go"
-	"github.com/OscarYuen/graphql-go/gqltesting"
+	"github.com/neelance/graphql-go/gqltesting"
 	"golang.org/x/net/context"
 	"log"
 )

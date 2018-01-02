@@ -3,7 +3,6 @@ package model
 import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
-	"time"
 )
 
 type User struct {
@@ -11,7 +10,7 @@ type User struct {
 	Email     string
 	Password  string
 	IPAddress string `db:"ip_address"`
-	CreatedAt *time.Time `db:"created_at"`
+	CreatedAt string `db:"created_at"`
 }
 
 func (user *User) HashedPassword() {

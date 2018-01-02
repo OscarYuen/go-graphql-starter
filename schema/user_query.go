@@ -8,10 +8,10 @@ import (
 )
 
 var userQuery = `
-	findUserByEmail(email: String!): User
+	user(email: String!): User
 `
 
-func (r *Resolver) FindUserByEmail(ctx context.Context,args struct {
+func (r *Resolver) User(ctx context.Context,args struct {
 	Email string
 }) (*userResolver, error) {
 	user, err := service.UserService.FindByEmail(args.Email)
