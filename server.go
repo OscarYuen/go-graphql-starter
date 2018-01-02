@@ -2,31 +2,30 @@ package main
 
 import (
 	"./handler"
-	"./model"
+	"./config"
 	"./schema"
-	//"./service"
+	"./service"
 	"log"
 	"net/http"
 
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
-	"golang.org/x/net/context"
 )
 
 func main() {
-	db, err := model.OpenDB("test.db")
+	db, err := config.OpenDB("test.db")
 	if err != nil {
 		log.Fatal("Unable to connect to db:")
 		log.Fatal(err)
 	}
-	ctx := context.WithValue(context.Background(), "db", db)
+	service.NewUserService(db)
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &schema.Resolver{})
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
 	}))
 
-	http.Handle("/query", handler.Authenticate(ctx, &relay.Handler{Schema: graphqlSchema}))
+	http.Handle("/query", handler.Authenticate(&relay.Handler{Schema: graphqlSchema}))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }

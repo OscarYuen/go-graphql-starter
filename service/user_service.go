@@ -3,26 +3,38 @@ package service
 import (
 	"../model"
 	"github.com/jmoiron/sqlx"
-	"golang.org/x/net/context"
+	"sync"
 )
 
-var UserService = &userService{}
+var UserService *userService
+var once sync.Once
 
 type userService struct {
-	//DB *sqlx.DB
+	DB *sqlx.DB
 }
 
-func (u *userService) FindByEmail(ctx context.Context, email string) (*model.User, error) {
+func NewUserService(db *sqlx.DB) *userService {
+	once.Do(func() {
+		UserService = &userService{DB: db}
+	})
+	return UserService
+}
+
+func (u *userService) FindByEmail(email string) (*model.User, error) {
 	user := &model.User{}
-	db := ctx.Value("db").(*sqlx.DB)
-	row := db.QueryRowx("SELECT * FROM users WHERE email=?", email)
+	row := u.DB.QueryRowx("SELECT * FROM users WHERE email=?", email)
 	err := row.StructScan(user)
 	return user, err
 }
 
-//func (u *userService) CreateUser(user *model.User) *gorm.DB {
-//	user.HashedPassword()
-//	return u.DB.Create(user)
-//}
+func (u *userService) CreateUser(user *model.User) (*model.User, error) {
+	userSQL := `INSERT INTO users (email, password, ip_address) VALUES (:email, :password, :ip_address")`
+	user.HashedPassword()
+	_, err  := u.DB.NamedQuery(userSQL, user)
+	if err != nil {
+		return nil, err
+	}
+	return user,err
+}
 
 

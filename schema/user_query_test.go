@@ -2,7 +2,8 @@ package schema
 
 import (
 	"testing"
-	"../model"
+	"../config"
+	"../service"
 	"github.com/neelance/graphql-go"
 	"github.com/OscarYuen/graphql-go/gqltesting"
 	"golang.org/x/net/context"
@@ -13,11 +14,12 @@ var rootSchema = graphql.MustParseSchema(GetRootSchema(), &Resolver{})
 var ctx context.Context
 
 func init() {
-	db,err := model.OpenDB("../test.db")
+	db, err := config.OpenDB("../test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	ctx = context.WithValue(context.Background(), "db", db)
+	service.NewUserService(db)
+	//ctx = context.WithValue(context.Background(), "db", db)
 }
 
 func TestBasic(t *testing.T) {

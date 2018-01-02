@@ -3,7 +3,7 @@ package schema
 import (
 	//"../conf"
 	"../model"
-	//"../service"
+	"../service"
 	"golang.org/x/net/context"
 )
 
@@ -18,6 +18,11 @@ func (r *Resolver) CreateUser(ctx context.Context,args *struct {
 	user := &model.User{
 		Email:    args.Email,
 		Password: args.Password,
+		IPAddress: ctx.Value("requester_ip").(string),
+	}
+	user, err := service.UserService.CreateUser(user)
+	if err != nil {
+		return nil, err
 	}
 	//rb := &repository.UserRepository{repository.BaseRepository{DB:conf.DB}}
 	//result := rb.CreateUser(user)

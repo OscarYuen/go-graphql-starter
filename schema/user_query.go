@@ -14,7 +14,7 @@ var userQuery = `
 func (r *Resolver) FindUserByEmail(ctx context.Context,args struct {
 	Email string
 }) (*userResolver, error) {
-	user, err := service.UserService.FindByEmail(ctx, args.Email)
+	user, err := service.UserService.FindByEmail(args.Email)
 	if err != nil {
 		return nil, err
 	}

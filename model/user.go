@@ -10,6 +10,7 @@ type User struct {
 	ID        int64
 	Email     string
 	Password  string
+	IPAddress string `db:"ip_address"`
 	CreatedAt *time.Time `db:"created_at"`
 }
 
