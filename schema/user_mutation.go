@@ -11,13 +11,13 @@ var userMutation = `
 	createUser(email: String!, password: String!): User
 `
 
-func (r *Resolver) CreateUser(ctx context.Context,args *struct {
+func (r *Resolver) CreateUser(ctx context.Context, args *struct {
 	Email    string
 	Password string
 }) (*userResolver, error) {
 	user := &model.User{
-		Email:    args.Email,
-		Password: args.Password,
+		Email:     args.Email,
+		Password:  args.Password,
 		IPAddress: ctx.Value("requester_ip").(string),
 	}
 	user, err := service.UserService.CreateUser(user)

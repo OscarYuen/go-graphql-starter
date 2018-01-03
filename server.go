@@ -1,8 +1,8 @@
 package main
 
 import (
-	"./handler"
 	"./config"
+	"./handler"
 	"./schema"
 	"./service"
 	"log"

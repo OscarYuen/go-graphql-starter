@@ -1,13 +1,13 @@
 package schema
 
 import (
-	"testing"
 	"../config"
 	"../service"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/gqltesting"
 	"golang.org/x/net/context"
 	"log"
+	"testing"
 )
 
 var rootSchema = graphql.MustParseSchema(GetRootSchema(), &Resolver{})
@@ -26,7 +26,7 @@ func TestBasic(t *testing.T) {
 	gqltesting.RunTests(t, []*gqltesting.Test{
 		{
 			Context: ctx,
-			Schema: rootSchema,
+			Schema:  rootSchema,
 			Query: `
 				{
 					findUserByEmail(email:"peter1") {

@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"log"
-	"net/http"
-	"golang.org/x/net/context"
-	"net"
 	"fmt"
+	"golang.org/x/net/context"
+	"log"
+	"net"
+	"net/http"
 )
 
 func Authenticate(h http.Handler) http.Handler {

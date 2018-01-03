@@ -21,4 +21,3 @@ func (user *User) HashedPassword() {
 	}
 	user.Password = string(hash)
 }
-
