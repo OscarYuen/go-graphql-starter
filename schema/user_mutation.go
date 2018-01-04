@@ -1,7 +1,6 @@
 package schema
 
 import (
-	//"../conf"
 	"../model"
 	"../service"
 	"golang.org/x/net/context"
@@ -20,7 +19,7 @@ func (r *Resolver) CreateUser(ctx context.Context, args *struct {
 		Password:  args.Password,
 		IPAddress: ctx.Value("requester_ip").(string),
 	}
-	user, err := service.UserService.CreateUser(user)
+	user, err := ctx.Value("userService").(*service.UserService).CreateUser(user)
 	if err != nil {
 		return nil, err
 	}

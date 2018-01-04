@@ -1,14 +1,13 @@
 package handler
 
 import (
-	"fmt"
 	"golang.org/x/net/context"
 	"log"
 	"net"
 	"net/http"
 )
 
-func Authenticate(h http.Handler) http.Handler {
+func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("Authorization")
 		log.Print(tokenString)
@@ -19,14 +18,9 @@ func Authenticate(h http.Handler) http.Handler {
 
 		ip, _, err := net.SplitHostPort(r.RemoteAddr)
 		if err != nil {
-			fmt.Fprintf(w, "userip: %q is not IP:port", r.RemoteAddr)
+			log.Fatal(w, "Requester ip: %q is not IP:port", r.RemoteAddr)
 		}
-		userIP := net.ParseIP(ip)
-		if userIP == nil {
-			fmt.Fprintf(w, "userip: %q is not IP:port", r.RemoteAddr)
-			return
-		}
-		ctx := context.WithValue(r.Context(), "requester_ip", ip)
+		ctx := context.WithValue(ctx, "requester_ip", ip)
 		log.Println(ip)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})

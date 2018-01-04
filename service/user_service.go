@@ -9,21 +9,28 @@ import (
 	"strings"
 )
 
-var UserService *userService
-var once sync.Once
+const (
+	defaultListFetchSize = 10
+	defaultDecodedIndex = 0
+)
 
-type userService struct {
+var (
+	userServiceInstance *UserService
+	once sync.Once
+)
+
+type UserService struct {
 	DB *sqlx.DB
 }
 
-func NewUserService(db *sqlx.DB) *userService {
+func NewUserService(db *sqlx.DB) *UserService {
 	once.Do(func() {
-		UserService = &userService{DB: db}
+		userServiceInstance = &UserService{DB: db}
 	})
-	return UserService
+	return userServiceInstance
 }
 
-func (u *userService) FindByEmail(email string) (*model.User, error) {
+func (u *UserService) FindByEmail(email string) (*model.User, error) {
 	user := &model.User{}
 	row := u.DB.QueryRowx("SELECT * FROM users WHERE email=?", email)
 	err := row.StructScan(user)
@@ -33,7 +40,7 @@ func (u *userService) FindByEmail(email string) (*model.User, error) {
 	return user, nil
 }
 
-func (u *userService) CreateUser(user *model.User) (*model.User, error) {
+func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 	userSQL := `INSERT INTO users (email, password, ip_address) VALUES (:email, :password, :ip_address)`
 	user.HashedPassword()
 	_, err := u.DB.NamedExec(userSQL, user)
@@ -43,9 +50,12 @@ func (u *userService) CreateUser(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-func (u *userService) List(first *int, after *string) ([]*model.User, error) {
+func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
 	users := []*model.User{}
 	decodedIndex, _ := decodeCursor(after)
+	if first == nil{
+		*first = defaultListFetchSize
+	}
 	userSQL := `SELECT * FROM users WHERE id > ? - 1 LIMIT ? `
 	err := u.DB.Select(&users, userSQL, decodedIndex, first)
 	if err != nil {
@@ -54,7 +64,7 @@ func (u *userService) List(first *int, after *string) ([]*model.User, error) {
 	return users, nil
 }
 
-func (u *userService) Count() (int, error) {
+func (u *UserService) Count() (int, error) {
 	var count int
 	userSQL := `SELECT count(*) FROM users`
 	err := u.DB.Get(&count, userSQL)
@@ -65,7 +75,7 @@ func (u *userService) Count() (int, error) {
 }
 
 func decodeCursor(after *string) (*int, error){
-	decodedValue := 0
+	decodedValue := defaultDecodedIndex
 	if after != nil {
 		b, err := base64.StdEncoding.DecodeString(string(*after))
 		if err != nil {

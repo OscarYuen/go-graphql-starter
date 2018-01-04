@@ -1,10 +1,8 @@
 package schema
 
 import (
-	//"../conf"
 	"../service"
 	"golang.org/x/net/context"
-	"log"
 )
 
 var userQuery = `
@@ -15,7 +13,7 @@ var userQuery = `
 func (r *Resolver) User(ctx context.Context, args struct {
 	Email string
 }) (*userResolver, error) {
-	user, err := service.UserService.FindByEmail(args.Email)
+	user, err := ctx.Value("userService").(*service.UserService).FindByEmail(args.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -40,8 +38,7 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	//}
 	//users := []*model.User{user1, user2}
 	first := int(*args.First)
-	users,_ :=  service.UserService.List(&first, args.After)
-	count,_ := service.UserService.Count()
-	log.Println(users)
+	users,_ := ctx.Value("userService").(*service.UserService).List(&first, args.After)
+	count,_ := ctx.Value("userService").(*service.UserService).Count()
 	return &usersConnectionResolver{users: users,totalCount:count, from: int(users[0].ID), to: int((users[len(users)-1]).ID)}, nil
 }
