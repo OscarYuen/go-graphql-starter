@@ -1,8 +1,9 @@
-package schema
+package resolver
 
 import (
 	"../config"
 	"../service"
+	"../schema"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/gqltesting"
 	"golang.org/x/net/context"
@@ -10,7 +11,7 @@ import (
 	"testing"
 )
 
-var rootSchema = graphql.MustParseSchema(GetRootSchema(), &Resolver{})
+var rootSchema = graphql.MustParseSchema(schema.GetRootSchema(), &Resolver{})
 var ctx context.Context
 
 func init() {
@@ -18,8 +19,8 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	service.NewUserService(db)
-	//ctx = context.WithValue(context.Background(), "db", db)
+	userService := service.NewUserService(db)
+	ctx = context.WithValue(context.Background(), "userService", userService)
 }
 
 func TestBasic(t *testing.T) {
@@ -29,7 +30,7 @@ func TestBasic(t *testing.T) {
 			Schema:  rootSchema,
 			Query: `
 				{
-					findUserByEmail(email:"peter1") {
+					user(email:"test@1.com") {
 						id
 						email
 						password
@@ -38,10 +39,10 @@ func TestBasic(t *testing.T) {
 			`,
 			ExpectedResult: `
 				{
-					"findUserByEmail":{
-						"email":"peter1",
-						"id":"2",
-						"password":"test"
+					"user": {
+					  "id": "1",
+					  "email": "test@1.com",
+					  "password": "$2a$10$dcQ3HXCCnrO.c/dt97NNT.VWCdAcY3W2vVJcignBjV1BliIc00/R."
 					}
 				}
 			`,

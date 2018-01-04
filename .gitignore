@@ -1,4 +1,6 @@
 # IDE
 .idea/
+/schema/bindata.go
 
 *.exe
+bindata.go

@@ -1,14 +1,10 @@
-package schema
+package resolver
 
 import (
 	"../model"
 	"../service"
 	"golang.org/x/net/context"
 )
-
-var userMutation = `
-	createUser(email: String!, password: String!): User
-`
 
 func (r *Resolver) CreateUser(ctx context.Context, args *struct {
 	Email    string

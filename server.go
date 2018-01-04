@@ -5,6 +5,7 @@ import (
 	"./handler"
 	"./schema"
 	"./service"
+	"./resolver"
 	"log"
 	"net/http"
 
@@ -22,7 +23,7 @@ func main() {
 
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
 
-	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &schema.Resolver{})
+	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)

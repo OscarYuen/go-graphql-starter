@@ -4,23 +4,18 @@ import (
 	"bytes"
 )
 
-var Schema = `
-	schema {
-		query: Query
-		mutation: Mutation
-	}`
-
 func GetRootSchema() string {
-	var buffer bytes.Buffer
-	buffer.WriteString(Schema)
-	buffer.WriteString(`type Query {`)
-	buffer.WriteString(userQuery)
-	buffer.WriteString(`}`)
-	buffer.WriteString(`type Mutation {`)
-	buffer.WriteString(userMutation)
-	buffer.WriteString(`}`)
-	buffer.WriteString(userSchema)
-	return buffer.String()
+	buf := bytes.Buffer{}
+	for _, name := range AssetNames() {
+		b := MustAsset(name)
+		buf.Write(b)
+
+		// Add a newline if the file does not end in a newline.
+		if len(b) > 0 && b[len(b)-1] != '\n' {
+			buf.WriteByte('\n')
+		}
+	}
+
+	return buf.String()
 }
 
-type Resolver struct{}

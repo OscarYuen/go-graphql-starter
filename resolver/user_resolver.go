@@ -1,4 +1,4 @@
-package schema
+package resolver
 
 import (
 	"../model"
@@ -9,39 +9,11 @@ import (
 	"time"
 )
 
-var userSchema = `
-	scalar Time
-	type User {
-		id: ID!
-		email: String
-		password: String
-		ipAddress: String
-		createdAt: Time
-	}
-	type UsersConnection {
-		totalCount: Int!
-		edges: [UsersEdge]
-		pageInfo: PageInfo!
-	}
-	type UsersEdge {
-		cursor: ID!
-		node: User
-	}
-	type PageInfo {
-		startCursor: ID
-		endCursor: ID
-		hasNextPage: Boolean!
-	}
-`
+type Resolver struct{}
 
 type userResolver struct {
 	u *model.User
 }
-
-//type usersConnectionArgs struct {
-//	First *int32
-//	After *string
-//}
 
 func (r *userResolver) ID() graphql.ID {
 	return graphql.ID(strconv.FormatInt(r.u.ID, 10))
