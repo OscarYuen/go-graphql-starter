@@ -1,19 +1,19 @@
 package model
 
 import (
-	"time"
 	"golang.org/x/crypto/bcrypt"
 	"log"
 )
 
 type User struct {
-	ID        int64  `gorm:"primary_key"`
-	Email     string `gorm:"size:255;not null;unique;index"`
-	Password  string `gorm:"size:16;not null"`
-	CreatedAt *time.Time
+	ID        int64
+	Email     string
+	Password  string
+	IPAddress string `db:"ip_address"`
+	CreatedAt string `db:"created_at"`
 }
 
-func (user *User) HashedPassword()  {
+func (user *User) HashedPassword() {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Fatal(err)

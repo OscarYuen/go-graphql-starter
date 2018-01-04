@@ -1,32 +1,21 @@
 package schema
 
 import (
-	"github.com/jinzhu/gorm"
 	"bytes"
 )
 
-var DB *gorm.DB
-var Schema = `
-	schema {
-		query: Query
-		mutation: Mutation
-	}
-	type Query {
-		findUserByEmail(email: String!): User
-	}
-	type Mutation {
-		createUser(email: String!, password: String!): User
-	}`
-
 func GetRootSchema() string {
-	var buffer bytes.Buffer
-	buffer.WriteString(Schema)
-	buffer.WriteString(userSchema)
-	return buffer.String()
+	buf := bytes.Buffer{}
+	for _, name := range AssetNames() {
+		b := MustAsset(name)
+		buf.Write(b)
+
+		// Add a newline if the file does not end in a newline.
+		if len(b) > 0 && b[len(b)-1] != '\n' {
+			buf.WriteByte('\n')
+		}
+	}
+
+	return buf.String()
 }
 
-func SetDatabase(db *gorm.DB) {
-	DB = db
-}
-
-type Resolver struct{}

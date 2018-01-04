@@ -11,8 +11,7 @@ ADD . $SRC_DIR
 RUN go get golang.org/x/crypto/bcrypt
 RUN go get github.com/neelance/graphql-go
 RUN go get github.com/neelance/graphql-go/relay 
-RUN go get github.com/jinzhu/gorm
-RUN go get github.com/jinzhu/gorm/dialects/sqlite
-
+RUN go get github.com/jmoiron/sqlx
+RUN go get github.com/mattn/go-sqlite3
 RUN cd $SRC_DIR;go build -o go-server; cp go-server /app/
 ENTRYPOINT ["./go-server"]

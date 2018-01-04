@@ -1,33 +1,35 @@
 package main
 
 import (
-	"github.com/OscarYuen/go-graphql-example/conf"
-	"github.com/OscarYuen/go-graphql-example/model"
-	"github.com/OscarYuen/go-graphql-example/schema"
+	"./config"
+	"./handler"
+	"./schema"
+	"./service"
+	"./resolver"
 	"log"
 	"net/http"
 
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
+	"golang.org/x/net/context"
 )
 
-var gschema *graphql.Schema
-
-func init() {
-	gschema = graphql.MustParseSchema(schema.GetRootSchema(), &schema.Resolver{})
-}
-
 func main() {
-	db := conf.ConnectDB()
-	schema.SetDatabase(db)
-	// Migrate the schema
-	db.AutoMigrate(&model.User{})
+	db, err := config.OpenDB("test.db")
+	if err != nil {
+		log.Fatal("Unable to connect to db:")
+		log.Fatal(err)
+	}
+
+	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
+
+	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(page)
 	}))
 
-	http.Handle("/query", &relay.Handler{Schema: gschema})
+	http.Handle("/query", handler.Authenticate(ctx, &relay.Handler{Schema: graphqlSchema}))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
@@ -48,6 +50,9 @@ var page = []byte(`
 			function graphQLFetcher(graphQLParams) {
 				return fetch("/query", {
 					method: "post",
+					headers: {
+					 'Authorization': 'Basic',
+				   	},
 					body: JSON.stringify(graphQLParams),
 					credentials: "include",
 				}).then(function (response) {

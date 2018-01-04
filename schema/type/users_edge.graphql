@@ -1,0 +1,4 @@
+type UsersEdge {
+    cursor: ID!
+    node: User
+}
