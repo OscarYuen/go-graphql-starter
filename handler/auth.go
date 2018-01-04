@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"../service"
 )
 
 func Authenticate(ctx context.Context, h http.Handler) http.Handler {
@@ -24,4 +25,12 @@ func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 		log.Println(ip)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
+
+func Login(w http.ResponseWriter, r *http.Request)  {
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	result := service.NewUserService(nil).ComparePassword(email, password)
+	log.Println(result)
+
 }

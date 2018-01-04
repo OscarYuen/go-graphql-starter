@@ -70,3 +70,11 @@ func (u *UserService) Count() (int, error) {
 	}
 	return count, nil
 }
+
+func (u *UserService) ComparePassword(email string, password string) bool {
+	user ,err := u.FindByEmail(email)
+	if err != nil {
+		return false
+	}
+	return user.ComparePassword(password)
+}

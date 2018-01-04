@@ -29,6 +29,8 @@ func main() {
 		w.Write(page)
 	}))
 
+	http.HandleFunc("/login", handler.Login)
+
 	http.Handle("/query", handler.Authenticate(ctx, &relay.Handler{Schema: graphqlSchema}))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
