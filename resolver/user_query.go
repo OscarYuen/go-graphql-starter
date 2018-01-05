@@ -23,7 +23,7 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	users, err := ctx.Value("userService").(*service.UserService).List(&first, args.After)
 	count, err := ctx.Value("userService").(*service.UserService).Count()
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return &usersConnectionResolver{users: users, totalCount: count, from: int(users[0].ID), to: int((users[len(users)-1]).ID)}, nil
 }

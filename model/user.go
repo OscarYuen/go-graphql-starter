@@ -16,7 +16,7 @@ type User struct {
 func (user *User) HashedPassword() error {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return err
 	}
 	user.Password = string(hash)

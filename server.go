@@ -3,9 +3,9 @@ package main
 import (
 	"./config"
 	"./handler"
+	"./resolver"
 	"./schema"
 	"./service"
-	"./resolver"
 	"log"
 	"net/http"
 
@@ -22,6 +22,7 @@ func main() {
 	}
 
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
+	ctx = context.WithValue(ctx, "authService", service.NewAuthService())
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
@@ -29,7 +30,7 @@ func main() {
 		w.Write(page)
 	}))
 
-	http.HandleFunc("/login", handler.Login)
+	http.Handle("/login", handler.Login(ctx))
 
 	http.Handle("/query", handler.Authenticate(ctx, &relay.Handler{Schema: graphqlSchema}))
 

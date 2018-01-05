@@ -2,8 +2,7 @@ package resolver
 
 import (
 	"../model"
-	"encoding/base64"
-	"fmt"
+	"../service"
 	"github.com/neelance/graphql-go"
 	"strconv"
 	"time"
@@ -24,7 +23,8 @@ func (r *userResolver) Email() *string {
 }
 
 func (r *userResolver) Password() *string {
-	return &r.u.Password
+	maskedPassword := "********"
+	return &maskedPassword
 }
 
 func (r *userResolver) IPAddress() *string {
@@ -41,10 +41,10 @@ func (r *userResolver) CreatedAt() (*graphql.Time, error) {
 }
 
 type usersConnectionResolver struct {
-	users []*model.User
+	users      []*model.User
 	totalCount int
-	from  int
-	to    int
+	from       int
+	to         int
 }
 
 func (r *usersConnectionResolver) TotalCount() int32 {
@@ -55,7 +55,7 @@ func (r *usersConnectionResolver) Edges() *[]*usersEdgeResolver {
 	l := make([]*usersEdgeResolver, r.to-r.from+1)
 	for i := range l {
 		l[i] = &usersEdgeResolver{
-			cursor: encodeCursor(r.from + i),
+			cursor: service.EncodeCursor(r.from + i),
 			model:  r.users[i],
 		}
 	}
@@ -64,14 +64,10 @@ func (r *usersConnectionResolver) Edges() *[]*usersEdgeResolver {
 
 func (r *usersConnectionResolver) PageInfo() *pageInfoResolver {
 	return &pageInfoResolver{
-		startCursor: encodeCursor(r.from),
-		endCursor:   encodeCursor(r.to),
+		startCursor: service.EncodeCursor(r.from),
+		endCursor:   service.EncodeCursor(r.to),
 		hasNextPage: r.to < r.totalCount,
 	}
-}
-
-func encodeCursor(i int) graphql.ID {
-	return graphql.ID(base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("cursor%d", i+1))))
 }
 
 type usersEdgeResolver struct {

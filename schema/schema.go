@@ -18,4 +18,3 @@ func GetRootSchema() string {
 
 	return buf.String()
 }
-

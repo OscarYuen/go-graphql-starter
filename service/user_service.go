@@ -13,7 +13,7 @@ const (
 
 var (
 	userServiceInstance *UserService
-	once                sync.Once
+	userOnce            sync.Once
 )
 
 type UserService struct {
@@ -21,7 +21,7 @@ type UserService struct {
 }
 
 func NewUserService(db *sqlx.DB) *UserService {
-	once.Do(func() {
+	userOnce.Do(func() {
 		userServiceInstance = &UserService{DB: db}
 	})
 	return userServiceInstance
@@ -49,7 +49,7 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 
 func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
 	users := []*model.User{}
-	decodedIndex, _ := decodeCursor(after)
+	decodedIndex, _ := DecodeCursor(after)
 	if first == nil {
 		*first = defaultListFetchSize
 	}
@@ -71,10 +71,10 @@ func (u *UserService) Count() (int, error) {
 	return count, nil
 }
 
-func (u *UserService) ComparePassword(email string, password string) bool {
-	user ,err := u.FindByEmail(email)
+func (u *UserService) ComparePassword(userCredentials *model.UserCredentials) (bool, *model.User) {
+	user, err := u.FindByEmail(userCredentials.Email)
 	if err != nil {
-		return false
+		return false, nil
 	}
-	return user.ComparePassword(password)
+	return user.ComparePassword(userCredentials.Password), user
 }
