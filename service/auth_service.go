@@ -7,7 +7,6 @@ import (
 	"sync"
 	"time"
 	"fmt"
-	"strings"
 	"log"
 )
 
@@ -38,11 +37,8 @@ func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 	return &tokenString, err
 }
 
-func (a *AuthService) ValidateJWT(tokens []string) (*jwt.Token, error){
-	tokenString := tokens[0]
-	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+func (a *AuthService) ValidateJWT(tokenString *string) (*jwt.Token, error){
+	token, err := jwt.Parse(*tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
