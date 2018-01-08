@@ -1,6 +1,6 @@
 package model
 
 type Response struct {
-	Code    int
-	Message string
+	Code  int    `json:"code"`
+	Error string `json:"error,omitempty"`
 }

@@ -1,7 +1,9 @@
 package service
 
 import (
+	"../config"
 	"../model"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"sync"
 )
@@ -71,10 +73,13 @@ func (u *UserService) Count() (int, error) {
 	return count, nil
 }
 
-func (u *UserService) ComparePassword(userCredentials *model.UserCredentials) (bool, *model.User) {
+func (u *UserService) ComparePassword(userCredentials *model.UserCredentials) (*model.User, error) {
 	user, err := u.FindByEmail(userCredentials.Email)
 	if err != nil {
-		return false, nil
+		return nil, errors.New(config.UnauthorizedAccess)
 	}
-	return user.ComparePassword(userCredentials.Password), user
+	if result := user.ComparePassword(userCredentials.Password); !result {
+		return nil, errors.New(config.UnauthorizedAccess)
+	}
+	return user, nil
 }

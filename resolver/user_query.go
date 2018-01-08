@@ -1,10 +1,10 @@
 package resolver
 
 import (
-	"../service"
-	"golang.org/x/net/context"
 	"../config"
+	"../service"
 	"errors"
+	"golang.org/x/net/context"
 )
 
 func (r *Resolver) User(ctx context.Context, args struct {

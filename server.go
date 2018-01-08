@@ -54,7 +54,7 @@ var page = []byte(`
 				return fetch("/query", {
 					method: "post",
 					headers: {
-					 'Authorization': 'Basic',
+					 'Authorization': 'Bearer ',
 				   	},
 					body: JSON.stringify(graphQLParams),
 					credentials: "include",

@@ -3,11 +3,11 @@ package service
 import (
 	"../model"
 	"encoding/base64"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"sync"
 	"time"
-	"fmt"
-	"log"
+	"strconv"
 )
 
 var (
@@ -27,7 +27,7 @@ func NewAuthService() *AuthService {
 
 func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":         base64.StdEncoding.EncodeToString([]byte(string(user.ID))),
+		"id":         base64.StdEncoding.EncodeToString([]byte(strconv.FormatInt(user.ID, 10))),
 		"created_at": user.CreatedAt,
 		"exp":        time.Now().Add(time.Second * 400).Unix(),
 		"iss":        "go-grapql-starter",
@@ -37,7 +37,7 @@ func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 	return &tokenString, err
 }
 
-func (a *AuthService) ValidateJWT(tokenString *string) (*jwt.Token, error){
+func (a *AuthService) ValidateJWT(tokenString *string) (*jwt.Token, error) {
 	token, err := jwt.Parse(*tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -45,6 +45,5 @@ func (a *AuthService) ValidateJWT(tokenString *string) (*jwt.Token, error){
 
 		return []byte("1234"), nil
 	})
-	log.Println(err)
 	return token, err
 }
