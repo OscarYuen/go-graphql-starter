@@ -6,13 +6,30 @@ import (
 	"./resolver"
 	"./schema"
 	"./service"
+	"./model"
 	"log"
 	"net/http"
 
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
 	"golang.org/x/net/context"
+	"time"
+	"encoding/json"
 )
+
+
+func serveHome(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.URL)
+	if r.URL.Path != "/home" {
+		http.Error(w, "Not found", 404)
+		return
+	}
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", 405)
+		return
+	}
+	http.ServeFile(w, r, "home.html")
+}
 
 func main() {
 	db, err := config.OpenDB("test.db")
@@ -31,6 +48,20 @@ func main() {
 	}))
 
 	http.Handle("/login", handler.Login(ctx))
+
+	hub := model.NewNotificationHub()
+	go hub.Run()
+
+
+	go func() {
+		time.Sleep(time.Second * 10)
+		noti := &model.Notification{Message:"hhhhhhhhhsssss"}
+		notiStr,_ := json.Marshal(noti)
+		hub.BroadcastMessage(notiStr)
+	}()
+	http.Handle("/ws", handler.Authenticate(ctx, handler.WebSocket(ctx,hub)))
+
+	http.HandleFunc("/home", serveHome)
 
 	http.Handle("/query", handler.Authenticate(ctx, &relay.Handler{Schema: graphqlSchema}))
 

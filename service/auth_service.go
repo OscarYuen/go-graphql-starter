@@ -5,9 +5,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"strconv"
 	"sync"
 	"time"
-	"strconv"
 )
 
 var (

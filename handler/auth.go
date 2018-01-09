@@ -12,15 +12,16 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"strings"
 	"strconv"
+	"strings"
+	"fmt"
 )
 
 func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
 			isAuthorized = false
-			userId int64
+			userId       int64
 		)
 		token, err := validateBearerAuthHeader(ctx, r)
 		if err == nil {
@@ -115,6 +116,7 @@ func validateBasicAuthHeader(r *http.Request) (*model.UserCredentials, error) {
 }
 
 func validateBearerAuthHeader(ctx context.Context, r *http.Request) (*jwt.Token, error) {
+	fmt.Println(r.Header)
 	auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 	if len(auth) != 2 || auth[0] != "Bearer" {
 		return nil, errors.New(config.CredentialsError)
