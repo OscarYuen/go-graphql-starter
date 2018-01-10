@@ -1,5 +1,9 @@
 package model
 
+import (
+	"encoding/json"
+)
+
 type NotificationHub struct {
 	// Registered clients.
 	clients map[*NotificationClient]bool
@@ -33,20 +37,25 @@ func (h *NotificationHub) Run() {
 				delete(h.clients, client)
 				close(client.send)
 			}
-		case message := <-h.broadcast:
-			for client := range h.clients {
-				select {
-				case client.send <- message:
-				default:
-					close(client.send)
-					delete(h.clients, client)
+		case notificationStr := <-h.broadcast:
+			notification := &Notification{}
+			if err := json.Unmarshal(notificationStr, notification); err == nil {
+				for client := range h.clients {
+					if *client.userId == notification.To {
+						select {
+						case client.send <- notificationStr:
+						default:
+							close(client.send)
+							delete(h.clients, client)
+						}
+					}
 				}
 			}
 		}
 	}
 }
 
-func (h *NotificationHub) BroadcastMessage(message []byte) {
-	h.broadcast <- message
+func (h *NotificationHub) BroadcastMessage(notification *Notification) {
+	notificationStr, _ := json.Marshal(notification)
+	h.broadcast <- notificationStr
 }
-

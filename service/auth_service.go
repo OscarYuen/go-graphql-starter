@@ -29,7 +29,7 @@ func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":         base64.StdEncoding.EncodeToString([]byte(strconv.FormatInt(user.ID, 10))),
 		"created_at": user.CreatedAt,
-		"exp":        time.Now().Add(time.Second * 400).Unix(),
+		"exp":        time.Now().Add(time.Second * 4000).Unix(),
 		"iss":        "go-grapql-starter",
 	})
 

@@ -2,5 +2,5 @@ package model
 
 type LoginResponse struct {
 	*Response
-	JWT string `json:"jwt,omitempty"`
+	AccessToken string `json:"access_token,omitempty"`
 }

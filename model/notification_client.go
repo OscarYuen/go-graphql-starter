@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/gorilla/websocket"
-	"time"
 	"bytes"
+	"github.com/gorilla/websocket"
 	"log"
+	"time"
 )
 
 const (
@@ -21,13 +21,14 @@ const (
 	maxMessageSize = 512
 )
 
-
 var (
 	newline = []byte{'\n'}
 	space   = []byte{' '}
 )
 
 type NotificationClient struct {
+	userId *int64
+
 	hub *NotificationHub
 
 	// The websocket connection.
@@ -37,11 +38,12 @@ type NotificationClient struct {
 	send chan []byte
 }
 
-func NewNotificationClient(hub *NotificationHub, conn *websocket.Conn, send chan []byte) *NotificationClient {
+func NewNotificationClient(userId *int64, hub *NotificationHub, conn *websocket.Conn, send chan []byte) *NotificationClient {
 	return &NotificationClient{
-		hub:  hub,
+		userId: userId,
+		hub:    hub,
 		conn:   conn,
-		send: send,
+		send:   send,
 	}
 }
 

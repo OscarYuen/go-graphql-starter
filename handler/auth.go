@@ -14,7 +14,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"fmt"
 )
 
 func Authenticate(ctx context.Context, h http.Handler) http.Handler {
@@ -32,14 +31,13 @@ func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 			} else {
 				log.Println(err)
 			}
-
 		}
 		ip, _, err := net.SplitHostPort(r.RemoteAddr)
 		if err != nil {
 			log.Println(w, "Requester ip: %q is not IP:port", r.RemoteAddr)
 		}
-		ctx = context.WithValue(ctx, "user_id", userId)
-		ctx = context.WithValue(ctx, "requester_ip", ip)
+		ctx = context.WithValue(ctx, "user_id", &userId)
+		ctx = context.WithValue(ctx, "requester_ip", &ip)
 		ctx = context.WithValue(ctx, "is_authorized", isAuthorized)
 		h.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -87,7 +85,7 @@ func Login(ctx context.Context) http.Handler {
 			Code: http.StatusOK,
 		}
 		loginResponse.Response = response
-		loginResponse.JWT = *tokenString
+		loginResponse.AccessToken = *tokenString
 		writeResponse(w, loginResponse, loginResponse.Code)
 	})
 }
@@ -116,12 +114,17 @@ func validateBasicAuthHeader(r *http.Request) (*model.UserCredentials, error) {
 }
 
 func validateBearerAuthHeader(ctx context.Context, r *http.Request) (*jwt.Token, error) {
-	fmt.Println(r.Header)
-	auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
-	if len(auth) != 2 || auth[0] != "Bearer" {
-		return nil, errors.New(config.CredentialsError)
+	var tokenString string
+	keys, ok := r.URL.Query()["at"]
+	if !ok || len(keys) < 1 {
+		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+		if len(auth) != 2 || auth[0] != "Bearer" {
+			return nil, errors.New(config.CredentialsError)
+		}
+		tokenString = auth[1]
+	} else {
+		tokenString = keys[0]
 	}
-	tokenString := auth[1]
 	token, err := ctx.Value("authService").(*service.AuthService).ValidateJWT(&tokenString)
 	return token, err
 }

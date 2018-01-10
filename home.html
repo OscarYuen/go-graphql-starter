@@ -26,7 +26,7 @@
                 return false;
             };
             if (window["WebSocket"]) {
-                conn = new WebSocket("ws://" + document.location.host + "/ws");
+                conn = new WebSocket("ws://" + document.location.host + "/ws?at=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkX2F0IjoiMjAxOC0wMS0wM1QxNToyNToyNloiLCJleHAiOjE1MTU1NzMwODAsImlkIjoiTXc9PSIsImlzcyI6ImdvLWdyYXBxbC1zdGFydGVyIn0.c1QYtflkF0ZxQIj05mOf_5BfniZ9ePDXajapKge-EQg");
                 conn.onclose = function (evt) {
                     var item = document.createElement("div");
                     item.innerHTML = "<b>Connection closed.</b>";

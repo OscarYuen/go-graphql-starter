@@ -3,20 +3,17 @@ package main
 import (
 	"./config"
 	"./handler"
+	"./model"
 	"./resolver"
 	"./schema"
 	"./service"
-	"./model"
 	"log"
 	"net/http"
 
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/relay"
 	"golang.org/x/net/context"
-	"time"
-	"encoding/json"
 )
-
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
@@ -37,9 +34,11 @@ func main() {
 		log.Fatal("Unable to connect to db:")
 		log.Fatal(err)
 	}
-
+	notificationHub := model.NewNotificationHub()
+	go notificationHub.Run()
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
 	ctx = context.WithValue(ctx, "authService", service.NewAuthService())
+	ctx = context.WithValue(ctx, "notificationHub", notificationHub)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
@@ -49,17 +48,7 @@ func main() {
 
 	http.Handle("/login", handler.Login(ctx))
 
-	hub := model.NewNotificationHub()
-	go hub.Run()
-
-
-	go func() {
-		time.Sleep(time.Second * 10)
-		noti := &model.Notification{Message:"hhhhhhhhhsssss"}
-		notiStr,_ := json.Marshal(noti)
-		hub.BroadcastMessage(notiStr)
-	}()
-	http.Handle("/ws", handler.Authenticate(ctx, handler.WebSocket(ctx,hub)))
+	http.Handle("/ws", handler.Authenticate(ctx, handler.WebSocket(notificationHub)))
 
 	http.HandleFunc("/home", serveHome)
 
@@ -85,7 +74,7 @@ var page = []byte(`
 				return fetch("/query", {
 					method: "post",
 					headers: {
-					 'Authorization': 'Bearer ',
+					 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkX2F0IjoiMjAxOC0wMS0wM1QxNToyNToyNloiLCJleHAiOjE1MTU1NzMwODAsImlkIjoiTXc9PSIsImlzcyI6ImdvLWdyYXBxbC1zdGFydGVyIn0.c1QYtflkF0ZxQIj05mOf_5BfniZ9ePDXajapKge-EQg',
 				   	},
 					body: JSON.stringify(graphQLParams),
 					credentials: "include",
