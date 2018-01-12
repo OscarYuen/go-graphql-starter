@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/OscarYuen/go-graphql-starter"
-  packages = ["config","handler","model","resolver","schema","service"]
-  revision = "ef969eac4bae03216daa7c66f66308b5bcf1dd2c"
-
-[[projects]]
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
   revision = "dbeaa9332f19a944acb5736b4456cfcc02140e29"
@@ -64,6 +58,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bce31b6a931f638cf9c058835c7695ea44a0f51659b800a5483675b2744d5a94"
+  inputs-digest = "622ca0f3fc2b4c1f740a41500d640c5e68a2f4eb0d0abdc307de96dec8b1ae1f"
   solver-name = "gps-cdcl"
   solver-version = 1

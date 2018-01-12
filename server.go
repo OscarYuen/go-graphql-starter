@@ -48,7 +48,7 @@ func main() {
 
 	http.Handle("/login", handler.Login(ctx))
 
-	http.Handle("/ws", handler.Authenticate(ctx, handler.WebSocket(notificationHub)))
+	http.Handle("/ws", handler.SimpleMiddleware(ctx, handler.WebSocket(notificationHub)))
 
 	http.HandleFunc("/home", serveHome)
 
