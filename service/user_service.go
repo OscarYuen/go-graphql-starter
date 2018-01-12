@@ -1,7 +1,9 @@
 package service
 
 import (
+	"../config"
 	"../model"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"sync"
 )
@@ -13,7 +15,7 @@ const (
 
 var (
 	userServiceInstance *UserService
-	once                sync.Once
+	userOnce            sync.Once
 )
 
 type UserService struct {
@@ -21,7 +23,7 @@ type UserService struct {
 }
 
 func NewUserService(db *sqlx.DB) *UserService {
-	once.Do(func() {
+	userOnce.Do(func() {
 		userServiceInstance = &UserService{DB: db}
 	})
 	return userServiceInstance
@@ -49,7 +51,7 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 
 func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
 	users := []*model.User{}
-	decodedIndex, _ := decodeCursor(after)
+	decodedIndex, _ := DecodeCursor(after)
 	if first == nil {
 		*first = defaultListFetchSize
 	}
@@ -69,4 +71,15 @@ func (u *UserService) Count() (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+func (u *UserService) ComparePassword(userCredentials *model.UserCredentials) (*model.User, error) {
+	user, err := u.FindByEmail(userCredentials.Email)
+	if err != nil {
+		return nil, errors.New(config.UnauthorizedAccess)
+	}
+	if result := user.ComparePassword(userCredentials.Password); !result {
+		return nil, errors.New(config.UnauthorizedAccess)
+	}
+	return user, nil
 }

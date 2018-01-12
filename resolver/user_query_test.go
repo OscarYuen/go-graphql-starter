@@ -2,8 +2,8 @@ package resolver
 
 import (
 	"../config"
-	"../service"
 	"../schema"
+	"../service"
 	"github.com/neelance/graphql-go"
 	"github.com/neelance/graphql-go/gqltesting"
 	"golang.org/x/net/context"

@@ -13,7 +13,7 @@ func (r *Resolver) CreateUser(ctx context.Context, args *struct {
 	user := &model.User{
 		Email:     args.Email,
 		Password:  args.Password,
-		IPAddress: ctx.Value("requester_ip").(string),
+		IPAddress: *ctx.Value("requester_ip").(*string),
 	}
 	user, err := ctx.Value("userService").(*service.UserService).CreateUser(user)
 	if err != nil {
