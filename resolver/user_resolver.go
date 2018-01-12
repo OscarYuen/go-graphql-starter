@@ -3,7 +3,7 @@ package resolver
 import (
 	"../model"
 	"../service"
-	"github.com/neelance/graphql-go"
+	graphql "github.com/neelance/graphql-go"
 	"strconv"
 	"time"
 )
