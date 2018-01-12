@@ -1,13 +1,13 @@
 package service
 
 import (
-	"../model"
+	"github.com/OscarYuen/go-graphql-starter/model"
 	"encoding/base64"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"strconv"
 	"sync"
 	"time"
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 var (

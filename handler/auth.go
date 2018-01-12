@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"../config"
-	"../model"
-	"../service"
+	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/model"
+	"github.com/OscarYuen/go-graphql-starter/service"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/net/context"
 	"log"
 	"net"
