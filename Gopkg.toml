@@ -1,0 +1,33 @@
+required = ["github.com/jteeuwen/go-bindata"]
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/OscarYuen/go-graphql-starter"
+
+[[constraint]]
+  name = "github.com/dgrijalva/jwt-go"
+  version = "3.1.0"
+
+[[constraint]]
+  name = "github.com/gorilla/websocket"
+  version = "1.2.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/jmoiron/sqlx"
+
+[[constraint]]
+  name = "github.com/mattn/go-sqlite3"
+  version = "1.6.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/neelance/graphql-go"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/crypto"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"
