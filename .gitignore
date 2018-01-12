@@ -1,6 +1,7 @@
 # IDE
 .idea/
 /schema/bindata.go
+/vendor
 
 *.exe
 bindata.go
