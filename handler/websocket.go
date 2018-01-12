@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"../config"
-	"../model"
+	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/http"

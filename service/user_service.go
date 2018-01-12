@@ -1,8 +1,8 @@
 package service
 
 import (
-	"../config"
-	"../model"
+	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/model"
 	"errors"
 	"github.com/jmoiron/sqlx"
 	"sync"

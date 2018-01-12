@@ -3,7 +3,7 @@ package service
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/neelance/graphql-go"
+	graphql "github.com/neelance/graphql-go"
 	"strconv"
 	"strings"
 )

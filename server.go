@@ -1,12 +1,12 @@
 package main
 
 import (
-	"./config"
-	"./handler"
-	"./model"
-	"./resolver"
-	"./schema"
-	"./service"
+	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/handler"
+	"github.com/OscarYuen/go-graphql-starter/model"
+	"github.com/OscarYuen/go-graphql-starter/resolver"
+	"github.com/OscarYuen/go-graphql-starter/schema"
+	"github.com/OscarYuen/go-graphql-starter/service"
 	"log"
 	"net/http"
 
