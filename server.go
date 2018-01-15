@@ -13,6 +13,9 @@ import (
 	graphql "github.com/neelance/graphql-go"
 	relay "github.com/neelance/graphql-go/relay"
 	"golang.org/x/net/context"
+	"github.com/spf13/viper"
+	"fmt"
+	"time"
 )
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
@@ -34,6 +37,17 @@ func main() {
 		log.Fatal("Unable to connect to db:")
 		log.Fatal(err)
 	}
+	viper.SetConfigName("Config") // name of config file (without extension)
+	viper.AddConfigPath(".")               // optionally look for config in the working directory
+	err = viper.ReadInConfig() // Find and read the config file
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
+	var (
+		signedSecret = viper.Get("auth.jwt-secret").(string)
+		expiredTimeInSecond = viper.Get("auth.jwt-expire-in").(time.Duration)
+	)
+
 	notificationHub := model.NewNotificationHub()
 	go notificationHub.Run()
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))

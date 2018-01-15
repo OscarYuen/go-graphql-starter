@@ -1,0 +1,7 @@
+app-name = "go-graphql-starter"
+
+[auth]
+#jwt sign secret
+jwt-secret = "1234"
+#jwt expired time in second
+jwt-expire-in = 400

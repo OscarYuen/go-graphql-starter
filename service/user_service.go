@@ -5,7 +5,6 @@ import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"errors"
 	"github.com/jmoiron/sqlx"
-	"sync"
 )
 
 const (
@@ -13,20 +12,13 @@ const (
 	defaultDecodedIndex  = 0
 )
 
-var (
-	userServiceInstance *UserService
-	userOnce            sync.Once
-)
 
 type UserService struct {
 	DB *sqlx.DB
 }
 
 func NewUserService(db *sqlx.DB) *UserService {
-	userOnce.Do(func() {
-		userServiceInstance = &UserService{DB: db}
-	})
-	return userServiceInstance
+	return &UserService{DB: db}
 }
 
 func (u *UserService) FindByEmail(email string) (*model.User, error) {
