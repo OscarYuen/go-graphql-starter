@@ -50,7 +50,7 @@ func main() {
 
 	http.Handle("/ws", handler.Authenticate(ctx, handler.WebSocket(notificationHub)))
 
-	http.HandleFunc("/home", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/notification", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "notification.html")
 	}))
 
