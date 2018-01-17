@@ -15,7 +15,7 @@ var rootSchema = graphql.MustParseSchema(schema.GetRootSchema(), &Resolver{})
 var ctx context.Context
 
 func init() {
-	db, err := config.OpenDB("github.com/OscarYuen/go-graphql-starter/test.db")
+	db, err := config.OpenDB("../test.db")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,7 +42,7 @@ func TestBasic(t *testing.T) {
 					"user": {
 					  "id": "1",
 					  "email": "test@1.com",
-					  "password": "$2a$10$dcQ3HXCCnrO.c/dt97NNT.VWCdAcY3W2vVJcignBjV1BliIc00/R."
+					  "password": "********"
 					}
 				}
 			`,

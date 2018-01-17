@@ -1,9 +1,9 @@
 package service
 
 import (
+	"errors"
 	"github.com/OscarYuen/go-graphql-starter/config"
 	"github.com/OscarYuen/go-graphql-starter/model"
-	"errors"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -11,7 +11,6 @@ const (
 	defaultListFetchSize = 10
 	defaultDecodedIndex  = 0
 )
-
 
 type UserService struct {
 	DB *sqlx.DB

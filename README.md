@@ -70,9 +70,16 @@ localhost:3000/login
 After that, you would get an access token(jwt)
 You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
 
-#### Web-socket Exmaple
+#### Web-socket Example:
 
-WIP
+You could use the notificationHub to broadcast message to specific target
+
+Demo Code:
+```
+notificationHub := ctx.Value("notificationHub").(*model.NotificationHub)
+noti := &model.Notification{From: 1, To: 9, Message: "1234222"}
+notificationHub.BroadcastMessage(noti)
+```
 
 #### Test:
 

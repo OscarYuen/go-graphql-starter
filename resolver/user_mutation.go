@@ -15,6 +15,7 @@ func (r *Resolver) CreateUser(ctx context.Context, args *struct {
 		Password:  args.Password,
 		IPAddress: *ctx.Value("requester_ip").(*string),
 	}
+
 	user, err := ctx.Value("userService").(*service.UserService).CreateUser(user)
 	if err != nil {
 		return nil, err

@@ -1,21 +1,22 @@
 package service
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
 	"encoding/base64"
 	"fmt"
+	"github.com/OscarYuen/go-graphql-starter/model"
+	jwt "github.com/dgrijalva/jwt-go"
 	"strconv"
 	"time"
-	jwt "github.com/dgrijalva/jwt-go"
 )
 
 type AuthService struct {
-	signedSecret *string
+	appName             *string
+	signedSecret        *string
 	expiredTimeInSecond *time.Duration
 }
 
-func NewAuthService(signedSecret *string,expiredTimeInSecond *time.Duration) *AuthService {
-	return &AuthService{signedSecret,expiredTimeInSecond}
+func NewAuthService(appName *string, signedSecret *string, expiredTimeInSecond *time.Duration) *AuthService {
+	return &AuthService{appName, signedSecret, expiredTimeInSecond}
 }
 
 func (a *AuthService) SignJWT(user *model.User) (*string, error) {
@@ -23,7 +24,7 @@ func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 		"id":         base64.StdEncoding.EncodeToString([]byte(strconv.FormatInt(user.ID, 10))),
 		"created_at": user.CreatedAt,
 		"exp":        time.Now().Add(time.Second * *a.expiredTimeInSecond).Unix(),
-		"iss":        "go-grapql-starter",
+		"iss":        *a.appName,
 	})
 
 	tokenString, err := token.SignedString([]byte(*a.signedSecret))

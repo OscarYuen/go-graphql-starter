@@ -1,10 +1,9 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/config"
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/OscarYuen/go-graphql-starter/service"
 	"errors"
+	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/service"
 	"golang.org/x/net/context"
 )
 
@@ -25,9 +24,6 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	if isAuthorized := ctx.Value("is_authorized").(bool); !isAuthorized {
 		return nil, errors.New(config.CredentialsError)
 	}
-	notificationHub := ctx.Value("notificationHub").(*model.NotificationHub)
-	noti := &model.Notification{From: 1, To: 9, Message: "1234222"}
-	notificationHub.BroadcastMessage(noti)
 
 	first := int(*args.First)
 	users, err := ctx.Value("userService").(*service.UserService).List(&first, args.After)

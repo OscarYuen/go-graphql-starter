@@ -12,9 +12,8 @@ import (
 
 	graphql "github.com/neelance/graphql-go"
 	relay "github.com/neelance/graphql-go/relay"
-	"golang.org/x/net/context"
 	"github.com/spf13/viper"
-	"fmt"
+	"golang.org/x/net/context"
 	"time"
 )
 
@@ -34,24 +33,24 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 func main() {
 	db, err := config.OpenDB("test.db")
 	if err != nil {
-		log.Fatal("Unable to connect to db:")
-		log.Fatal(err)
+		log.Fatalf("Unable to connect to db: %s \n", err)
 	}
-	viper.SetConfigName("Config") // name of config file (without extension)
-	viper.AddConfigPath(".")               // optionally look for config in the working directory
-	err = viper.ReadInConfig() // Find and read the config file
-	if err != nil { // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	viper.SetConfigName("Config")
+	viper.AddConfigPath(".")
+	err = viper.ReadInConfig()
+	if err != nil {
+		log.Fatalf("Fatal error config file: %s \n", err)
 	}
 	var (
-		signedSecret = viper.Get("auth.jwt-secret").(string)
+		appName             = viper.Get("app-name").(string)
+		signedSecret        = viper.Get("auth.jwt-secret").(string)
 		expiredTimeInSecond = time.Duration(viper.Get("auth.jwt-expire-in").(int64))
 	)
 
 	notificationHub := model.NewNotificationHub()
 	go notificationHub.Run()
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
-	ctx = context.WithValue(ctx, "authService", service.NewAuthService(&signedSecret,&expiredTimeInSecond))
+	ctx = context.WithValue(ctx, "authService", service.NewAuthService(&appName, &signedSecret, &expiredTimeInSecond))
 	ctx = context.WithValue(ctx, "notificationHub", notificationHub)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
