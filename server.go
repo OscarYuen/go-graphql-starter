@@ -45,13 +45,13 @@ func main() {
 	}
 	var (
 		signedSecret = viper.Get("auth.jwt-secret").(string)
-		expiredTimeInSecond = viper.Get("auth.jwt-expire-in").(time.Duration)
+		expiredTimeInSecond = time.Duration(viper.Get("auth.jwt-expire-in").(int64))
 	)
 
 	notificationHub := model.NewNotificationHub()
 	go notificationHub.Run()
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
-	ctx = context.WithValue(ctx, "authService", service.NewAuthService())
+	ctx = context.WithValue(ctx, "authService", service.NewAuthService(&signedSecret,&expiredTimeInSecond))
 	ctx = context.WithValue(ctx, "notificationHub", notificationHub)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})

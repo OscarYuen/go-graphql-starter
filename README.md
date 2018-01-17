@@ -8,9 +8,10 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
 - [x] Use go-bindata to generate Go code from .graphql file
 - [ ] Use psql
 - [ ] Integrated with dataloader
-- [ ] Add authentication & authorization
+- [x] Add authentication & authorization
 - [ ] Add unit test cases
 - [ ] Support subscription
+- [ ] Support web-socket notification and messaging
 
 #### Usage:
 
@@ -39,6 +40,40 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     go build server.go
     ```
     
+#### Graphql Example:
+
+Test in graphiql by the following endpoint
+
+```
+localhost:3000
+```
+
+Basically there are two graphql queries and one mutation
+
+Query:
+1. Get an user by email
+2. Get user list by cursor pagination
+
+Mutation:
+1. Create an user
+
+For user list query, you need to be authenticated in order to use it.
+Authentication is not required for other operations.
+
+In order to perform authentication/login, you need to create a user by graphql mutation first
+
+Then you could submit your email and password by Basic Authorization Header with the following endpoint using POST method
+```
+localhost:3000/login
+```
+
+After that, you would get an access token(jwt)
+You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
+
+#### Web-socket Exmaple
+
+WIP
+
 #### Test:
 
 - Run Unit Tests
