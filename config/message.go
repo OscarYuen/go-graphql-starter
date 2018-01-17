@@ -1,7 +1,8 @@
 package config
 
 const (
-	CredentialsError   = "credentials error"
-	TokenError         = "token error"
-	UnauthorizedAccess = "unauthorized access"
+	PostMethodSupported = "only post method is allowed"
+	CredentialsError    = "credentials error"
+	TokenError          = "token error"
+	UnauthorizedAccess  = "unauthorized access"
 )

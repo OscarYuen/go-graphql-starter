@@ -7,8 +7,9 @@ import (
 )
 
 func OpenDB(path string) (*sqlx.DB, error) {
-	log.Println("Start to open a new DB... ")
+	log.Println("Database is inilializing... ")
 	db, err := sqlx.Open("sqlite3", path)
+	log.Println("Database is inilialized ")
 	if err != nil {
 		return nil, err
 	}

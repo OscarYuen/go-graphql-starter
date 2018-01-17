@@ -48,7 +48,15 @@ func Login(ctx context.Context) http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		loginResponse := &model.LoginResponse{}
 
-		//err := json.NewDecoder(r.Body).Decode(&userCredentials)
+		if r.Method != http.MethodPost {
+			response := &model.Response{
+				Code:  http.StatusMethodNotAllowed,
+				Error: config.PostMethodSupported,
+			}
+			loginResponse.Response = response
+			writeResponse(w, loginResponse, loginResponse.Code)
+			return
+		}
 		userCredentials, err := validateBasicAuthHeader(r)
 		if err != nil {
 			response := &model.Response{

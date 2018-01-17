@@ -17,19 +17,6 @@ import (
 	"time"
 )
 
-func serveHome(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL)
-	if r.URL.Path != "/home" {
-		http.Error(w, "Not found", 404)
-		return
-	}
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", 405)
-		return
-	}
-	http.ServeFile(w, r, "notification.html")
-}
-
 func main() {
 	db, err := config.OpenDB("test.db")
 	if err != nil {
@@ -63,7 +50,9 @@ func main() {
 
 	http.Handle("/ws", handler.Authenticate(ctx, handler.WebSocket(notificationHub)))
 
-	http.HandleFunc("/home", serveHome)
+	http.HandleFunc("/home", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "notification.html")
+	}))
 
 	http.Handle("/query", handler.Authenticate(ctx, &relay.Handler{Schema: graphqlSchema}))
 

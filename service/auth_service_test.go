@@ -3,9 +3,9 @@ package service
 import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/spf13/viper"
+	"log"
 	"testing"
 	"time"
-	"log"
 )
 
 var (
