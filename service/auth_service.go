@@ -4,9 +4,12 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/OscarYuen/go-graphql-starter/model"
+	"github.com/OscarYuen/go-graphql-starter/util"
 	jwt "github.com/dgrijalva/jwt-go"
 	"strconv"
 	"time"
+	"golang.org/x/crypto/bcrypt"
+	"go/types"
 )
 
 type AuthService struct {
@@ -40,4 +43,10 @@ func (a *AuthService) ValidateJWT(tokenString *string) (*jwt.Token, error) {
 		return []byte(*a.signedSecret), nil
 	})
 	return token, err
+}
+
+func (a *AuthService) GenerateResetPasswordToken(user *model.User) *model.ResetPasswordToken {
+	randomStr := util.RandStringBytesMaskImprSrc(16)
+	resetPasswordToken := &model.ResetPasswordToken{ID: randomStr, UserID: user.ID}
+	return resetPasswordToken
 }
