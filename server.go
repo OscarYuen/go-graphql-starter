@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/viper"
 	"golang.org/x/net/context"
 	"time"
+	"github.com/OscarYuen/go-graphql-starter/loader"
 )
 
 func main() {
@@ -28,6 +29,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Fatal error config file: %s \n", err)
 	}
+
 	var (
 		appName             = viper.Get("app-name").(string)
 		signedSecret        = viper.Get("auth.jwt-secret").(string)
@@ -39,6 +41,7 @@ func main() {
 	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
 	ctx = context.WithValue(ctx, "authService", service.NewAuthService(&appName, &signedSecret, &expiredTimeInSecond))
 	ctx = context.WithValue(ctx, "notificationHub", notificationHub)
+	ctx = loader.NewLoaderCollection().Attach(ctx)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
