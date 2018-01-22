@@ -8,8 +8,6 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"strconv"
 	"time"
-	"golang.org/x/crypto/bcrypt"
-	"go/types"
 )
 
 type AuthService struct {

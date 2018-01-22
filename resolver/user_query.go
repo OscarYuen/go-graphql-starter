@@ -5,12 +5,14 @@ import (
 	"github.com/OscarYuen/go-graphql-starter/config"
 	"github.com/OscarYuen/go-graphql-starter/service"
 	"golang.org/x/net/context"
+	"github.com/OscarYuen/go-graphql-starter/loader"
 )
 
 func (r *Resolver) User(ctx context.Context, args struct {
 	Email string
 }) (*userResolver, error) {
-	user, err := ctx.Value("userService").(*service.UserService).FindByEmail(args.Email)
+	//user, err := ctx.Value("userService").(*service.UserService).FindByEmail(args.Email)
+	user, err := loader.LoadUser(ctx, args.Email)
 	if err != nil {
 		return nil, err
 	}
