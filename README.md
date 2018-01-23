@@ -7,7 +7,7 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
 - [x] Integrated with graphql-go
 - [x] Use go-bindata to generate Go code from .graphql file
 - [ ] Use psql
-- [ ] Integrated with dataloader
+- [x] Integrated with dataloader
 - [x] Add authentication & authorization
 - [ ] Add unit test cases
 - [ ] Support subscription
