@@ -31,3 +31,11 @@ required = ["github.com/jteeuwen/go-bindata"]
 [[constraint]]
   branch = "master"
   name = "golang.org/x/net"
+
+[[constraint]]
+  name = "gopkg.in/nicksrandall/dataloader.v5"
+  version = "v5"
+
+[[constraint]]
+  name = "github.com/spf13/viper"
+  version = "v1.0.0"

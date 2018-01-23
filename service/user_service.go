@@ -5,6 +5,7 @@ import (
 	"github.com/OscarYuen/go-graphql-starter/config"
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/jmoiron/sqlx"
+	"log"
 )
 
 const (

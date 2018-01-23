@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/OscarYuen/go-graphql-starter/model"
+	"github.com/OscarYuen/go-graphql-starter/util"
 	jwt "github.com/dgrijalva/jwt-go"
 	"strconv"
 	"time"
@@ -34,10 +35,16 @@ func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 func (a *AuthService) ValidateJWT(tokenString *string) (*jwt.Token, error) {
 	token, err := jwt.Parse(*tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("	unexpected signing method: %v", token.Header["alg"])
 		}
 
 		return []byte(*a.signedSecret), nil
 	})
 	return token, err
+}
+
+func (a *AuthService) GenerateResetPasswordToken(user *model.User) *model.ResetPasswordToken {
+	randomStr := util.RandStringBytesMaskImprSrc(16)
+	resetPasswordToken := &model.ResetPasswordToken{ID: randomStr, UserID: user.ID}
+	return resetPasswordToken
 }
