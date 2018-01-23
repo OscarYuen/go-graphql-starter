@@ -16,12 +16,13 @@ import (
 	"strings"
 )
 
-func Authenticate(ctx context.Context, h http.Handler) http.Handler {
+func Authenticate(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
 			isAuthorized = false
 			userId       int64
 		)
+		ctx := r.Context()
 		token, err := validateBearerAuthHeader(ctx, r)
 		if err == nil {
 			isAuthorized = true
@@ -36,6 +37,7 @@ func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 		if err != nil {
 			log.Println(w, "Requester ip: %q is not IP:port", r.RemoteAddr)
 		}
+
 		ctx = context.WithValue(ctx, "user_id", &userId)
 		ctx = context.WithValue(ctx, "requester_ip", &ip)
 		ctx = context.WithValue(ctx, "is_authorized", isAuthorized)
@@ -43,9 +45,10 @@ func Authenticate(ctx context.Context, h http.Handler) http.Handler {
 	})
 }
 
-func Login(ctx context.Context) http.Handler {
+func Login() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
+		ctx := r.Context()
 		loginResponse := &model.LoginResponse{}
 
 		if r.Method != http.MethodPost {

@@ -31,5 +31,3 @@ func (user *User) ComparePassword(password string) bool {
 	}
 	return true
 }
-
-

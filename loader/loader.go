@@ -1,15 +1,15 @@
 package loader
 
 import (
-	"gopkg.in/nicksrandall/dataloader.v5"
 	"fmt"
 	"golang.org/x/net/context"
+	"gopkg.in/nicksrandall/dataloader.v5"
 )
 
 type key string
 
 const (
-	userLoaderKey     key = "user"
+	userLoaderKey key = "user"
 )
 
 // Initialize a lookup map of context keys to batch functions.
@@ -21,7 +21,7 @@ const (
 func NewLoaderCollection() LoaderCollection {
 	return LoaderCollection{
 		dataloaderFuncMap: map[key]dataloader.BatchFunc{
-			userLoaderKey:     newUserLoader(),
+			userLoaderKey: newUserLoader(),
 		},
 	}
 }
@@ -30,7 +30,6 @@ func NewLoaderCollection() LoaderCollection {
 type LoaderCollection struct {
 	dataloaderFuncMap map[key]dataloader.BatchFunc
 }
-
 
 func (c LoaderCollection) Attach(ctx context.Context) context.Context {
 	for k, batchFn := range c.dataloaderFuncMap {
