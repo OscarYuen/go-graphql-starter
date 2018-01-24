@@ -38,7 +38,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     ```
     go generate ./schema
     ```
-    
     There would be bindata.go generated under `schema` folder
     
 4. Start the server
