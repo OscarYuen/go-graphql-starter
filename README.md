@@ -32,14 +32,15 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     ```
     go-bindata -ignore=\.go -pkg=schema -o=schema/bindata.go schema/...
     ```
-    
-    OR
-    
+
+    OR
+
     ```
     go generate ./schema
     ```
     There would be bindata.go generated under `schema` folder
-    
+
+
 4. Start the server
     ```
     go build server.go
