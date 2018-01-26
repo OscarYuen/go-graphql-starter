@@ -6,6 +6,7 @@ import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/OscarYuen/go-graphql-starter/util"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/op/go-logging"
 	"strconv"
 	"time"
 )
@@ -14,10 +15,11 @@ type AuthService struct {
 	appName             *string
 	signedSecret        *string
 	expiredTimeInSecond *time.Duration
+	log                 *logging.Logger
 }
 
-func NewAuthService(appName *string, signedSecret *string, expiredTimeInSecond *time.Duration) *AuthService {
-	return &AuthService{appName, signedSecret, expiredTimeInSecond}
+func NewAuthService(appName *string, signedSecret *string, expiredTimeInSecond *time.Duration, log *logging.Logger) *AuthService {
+	return &AuthService{appName, signedSecret, expiredTimeInSecond, log}
 }
 
 func (a *AuthService) SignJWT(user *model.User) (*string, error) {

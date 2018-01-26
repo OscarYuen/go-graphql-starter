@@ -11,6 +11,7 @@ type User struct {
 	Password  string
 	IPAddress string `db:"ip_address"`
 	CreatedAt string `db:"created_at"`
+	Roles     []*Role
 }
 
 func (user *User) HashedPassword() error {

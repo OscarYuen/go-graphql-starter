@@ -7,8 +7,6 @@ import (
 	"time"
 )
 
-type Resolver struct{}
-
 type userResolver struct {
 	u *model.User
 }
@@ -37,4 +35,14 @@ func (r *userResolver) CreatedAt() (*graphql.Time, error) {
 
 	t, err := time.Parse(time.RFC3339, r.u.CreatedAt)
 	return &graphql.Time{Time: t}, err
+}
+
+func (r *userResolver) Roles() *[]*roleResolver {
+	l := make([]*roleResolver, len(r.u.Roles))
+	for i := range l {
+		l[i] = &roleResolver{
+			role: r.u.Roles[i],
+		}
+	}
+	return &l
 }

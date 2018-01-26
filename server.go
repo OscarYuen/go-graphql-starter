@@ -38,8 +38,17 @@ func main() {
 	)
 	notificationHub := model.NewNotificationHub()
 	go notificationHub.Run()
-	ctx := context.WithValue(context.Background(), "userService", service.NewUserService(db))
-	ctx = context.WithValue(ctx, "authService", service.NewAuthService(&appName, &signedSecret, &expiredTimeInSecond))
+
+	ctx := context.Background()
+	log := h.NewLogger(&appName, debugMode, &logFormat)
+	roleService := service.NewRoleService(db, log)
+	userService := service.NewUserService(db, roleService, log)
+	authService := service.NewAuthService(&appName, &signedSecret, &expiredTimeInSecond, log)
+
+	ctx = context.WithValue(ctx, "log", log)
+	ctx = context.WithValue(ctx, "roleService", roleService)
+	ctx = context.WithValue(ctx, "userService", userService)
+	ctx = context.WithValue(ctx, "authService", authService)
 	ctx = context.WithValue(ctx, "notificationHub", notificationHub)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
@@ -56,8 +65,8 @@ func main() {
 		http.ServeFile(w, r, "notification.html")
 	}))
 
-	logger := &h.Logger{&appName, debugMode, &logFormat}
-	http.Handle("/query", h.AddContext(ctx, logger.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders:loader.NewLoaderCollection()}))))
+	loggerHandler := &h.LoggerHandler{debugMode, log}
+	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }

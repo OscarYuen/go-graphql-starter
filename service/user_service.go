@@ -1,10 +1,12 @@
 package service
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/OscarYuen/go-graphql-starter/config"
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/jmoiron/sqlx"
+	"github.com/op/go-logging"
 )
 
 const (
@@ -13,27 +15,44 @@ const (
 )
 
 type UserService struct {
-	DB *sqlx.DB
+	db          *sqlx.DB
+	roleService *RoleService
+	log         *logging.Logger
 }
 
-func NewUserService(db *sqlx.DB) *UserService {
-	return &UserService{DB: db}
+func NewUserService(db *sqlx.DB, roleService *RoleService, log *logging.Logger) *UserService {
+	return &UserService{db: db, roleService: roleService, log: log}
 }
 
 func (u *UserService) FindByEmail(email string) (*model.User, error) {
 	user := &model.User{}
-	row := u.DB.QueryRowx("SELECT * FROM users WHERE email=?", email)
+
+	userSQL := `SELECT user.*
+	FROM users user
+	WHERE user.email = ? `
+	row := u.db.QueryRowx(userSQL, email)
 	err := row.StructScan(user)
+	if err == sql.ErrNoRows {
+		return user, nil
+	}
 	if err != nil {
+		u.log.Errorf("Error in retrieving user : %v", err)
 		return nil, err
 	}
+
+	roles, err := u.roleService.FindByUserId(user.ID)
+	if err != nil {
+		u.log.Errorf("Error in retrieving roles : %v", err)
+		return nil, err
+	}
+	user.Roles = roles
 	return user, nil
 }
 
 func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 	userSQL := `INSERT INTO users (email, password, ip_address) VALUES (:email, :password, :ip_address)`
 	user.HashedPassword()
-	_, err := u.DB.NamedExec(userSQL, user)
+	_, err := u.db.NamedExec(userSQL, user)
 	if err != nil {
 		return nil, err
 	}
@@ -41,13 +60,13 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 }
 
 func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
-	users := []*model.User{}
+	users := make([]*model.User, 0)
 	decodedIndex, _ := DecodeCursor(after)
 	if first == nil {
 		*first = defaultListFetchSize
 	}
 	userSQL := `SELECT * FROM users WHERE id > ? - 1 LIMIT ? `
-	err := u.DB.Select(&users, userSQL, decodedIndex, first)
+	err := u.db.Select(&users, userSQL, decodedIndex, first)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +76,7 @@ func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
 func (u *UserService) Count() (int, error) {
 	var count int
 	userSQL := `SELECT count(*) FROM users`
-	err := u.DB.Get(&count, userSQL)
+	err := u.db.Get(&count, userSQL)
 	if err != nil {
 		return 0, err
 	}
