@@ -14,7 +14,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
 - [ ] Support web-socket notification and messaging
 
 #### Structure
-    ```
     go-graphql-starer
     │   README.md
     │   test.db             --- the temporary testing database for demo
@@ -39,7 +38,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     │       └───...         --- graphql schema files in *.graphql format
     └───service             --- services for users, authorization etc.
     └───util                --- utilities
-    ```
 
 #### Usage:
 
