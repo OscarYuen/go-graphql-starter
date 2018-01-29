@@ -53,20 +53,20 @@ func main() {
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
-	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "graphiql.html")
-	}))
-
 	http.Handle("/login", h.AddContext(ctx, h.Login()))
 
 	http.Handle("/ws", h.AddContext(ctx, h.Authenticate(h.WebSocket(notificationHub))))
 
+	loggerHandler := &h.LoggerHandler{debugMode, log}
+	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
+
+	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "graphiql.html")
+	}))
+
 	http.HandleFunc("/notification", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "notification.html")
 	}))
-
-	loggerHandler := &h.LoggerHandler{debugMode, log}
-	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
