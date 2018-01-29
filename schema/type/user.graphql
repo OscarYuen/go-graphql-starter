@@ -4,4 +4,5 @@ type User {
     password: String
     ipAddress: String
     createdAt: Time
+    roles: [Role]
 }

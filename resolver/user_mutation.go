@@ -3,8 +3,8 @@ package resolver
 import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/OscarYuen/go-graphql-starter/service"
-	"golang.org/x/net/context"
 	"github.com/op/go-logging"
+	"golang.org/x/net/context"
 )
 
 func (r *Resolver) CreateUser(ctx context.Context, args *struct {
@@ -19,9 +19,9 @@ func (r *Resolver) CreateUser(ctx context.Context, args *struct {
 
 	user, err := ctx.Value("userService").(*service.UserService).CreateUser(user)
 	if err != nil {
-		ctx.Value("logger").(*logging.Logger).Errorf("Graphql error : %v", err)
+		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
 		return nil, err
 	}
-	ctx.Value("logger").(*logging.Logger).Debugf("Created user : %v", *user)
+	ctx.Value("log").(*logging.Logger).Debugf("Created user : %v", *user)
 	return &userResolver{user}, nil
 }
