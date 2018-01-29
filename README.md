@@ -74,33 +74,33 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     
 #### Graphql Example:
 
-    Test in graphiql by the following endpoint
+Test in graphiql by the following endpoint
 
-    ```
-    localhost:3000
-    ```
+```
+localhost:3000
+```
 
-    Basically there are two graphql queries and one mutation
+Basically there are two graphql queries and one mutation
 
-    Query:
-    1. Get an user by email
-    2. Get user list by cursor pagination
+Query:
+1. Get an user by email
+2. Get user list by cursor pagination
 
-    Mutation:
-    1. Create an user
+Mutation:
+1. Create an user
 
-    For user list query, you need to be authenticated in order to use it.
-    Authentication is not required for other operations.
+For user list query, you need to be authenticated in order to use it.
+Authentication is not required for other operations.
 
-    In order to perform authentication/login, you need to create a user by graphql mutation first
+In order to perform authentication/login, you need to create a user by graphql mutation first
 
-    Then you could submit your email and password by Basic Authorization Header with the following endpoint using POST method
-    ```
-    localhost:3000/login
-    ```
+Then you could submit your email and password by Basic Authorization Header with the following endpoint using POST method
+```
+localhost:3000/login
+```
 
-    After that, you would get an access token(jwt)
-    You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
+After that, you would get an access token(jwt)
+You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
 
 #### Test:
 
@@ -111,6 +111,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     
 #### Reference
 
-    -[neelance/graphql-go](https://github.com/neelance/graphql-go)
+-[neelance/graphql-go](https://github.com/neelance/graphql-go)
 
-    -[tonyghita/graphql-go-example](https://github.com/tonyghita/graphql-go-example)
+-[tonyghita/graphql-go-example](https://github.com/tonyghita/graphql-go-example)
