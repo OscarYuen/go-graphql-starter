@@ -1,0 +1,8 @@
+CREATE TABLE users
+(
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  email      VARCHAR(255) NOT NULL UNIQUE,
+  password   VARCHAR(16)  NOT NULL,
+  ip_address VARCHAR(45),
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

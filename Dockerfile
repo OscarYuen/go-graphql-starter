@@ -2,16 +2,17 @@
 # and a workspace (GOPATH) configured at /go.
 FROM golang
 
-WORKDIR /app
-
-ENV SRC_DIR=/go/src/github.com/OscarYuen/go-graphql-example/
+ENV SRC_DIR=/go/src/github.com/OscarYuen/go-graphql-starter/
+WORKDIR $SRC_DIR
 # Add the source code:
 ADD . $SRC_DIR
+
 # Build it:
-RUN go get golang.org/x/crypto/bcrypt
-RUN go get github.com/neelance/graphql-go
-RUN go get github.com/neelance/graphql-go/relay 
-RUN go get github.com/jmoiron/sqlx
-RUN go get github.com/mattn/go-sqlite3
-RUN cd $SRC_DIR;go build -o go-server; cp go-server /app/
-ENTRYPOINT ["./go-server"]
+RUN go get -v github.com/jteeuwen/go-bindata/...
+RUN export GOPATH=$HOME/go
+RUN export PATH=$PATH:$GOPATH/bin
+RUN go generate ./schema
+RUN go get -v ./
+RUN go build
+ENTRYPOINT ["./go-graphql-starter"]
+EXPOSE 3000

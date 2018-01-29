@@ -1,8 +1,9 @@
 app-name = "go-graphql-starter"
+version = 1.0
 
 [log]
-debug_mode = true
-log_format = "%{color}%{time:2006/01/02 15:04:05 -07:00 MST} [%{level:.6s}] %{shortfile} : %{color:reset}%{message}"
+debug-mode = true
+log-format = "%{color}%{time:2006/01/02 15:04:05 -07:00 MST} [%{level:.6s}] %{shortfile} : %{color:reset}%{message}"
 
 [auth]
 #jwt sign secret

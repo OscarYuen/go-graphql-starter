@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/OscarYuen/go-graphql-starter/config"
 	h "github.com/OscarYuen/go-graphql-starter/handler"
-	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/OscarYuen/go-graphql-starter/resolver"
 	"github.com/OscarYuen/go-graphql-starter/schema"
 	"github.com/OscarYuen/go-graphql-starter/service"
@@ -33,11 +32,9 @@ func main() {
 		appName             = viper.Get("app-name").(string)
 		signedSecret        = viper.Get("auth.jwt-secret").(string)
 		expiredTimeInSecond = time.Duration(viper.Get("auth.jwt-expire-in").(int64))
-		debugMode           = viper.Get("log.debug_mode").(bool)
-		logFormat           = viper.Get("log.log_format").(string)
+		debugMode           = viper.Get("log.debug-mode").(bool)
+		logFormat           = viper.Get("log.log-format").(string)
 	)
-	notificationHub := model.NewNotificationHub()
-	go notificationHub.Run()
 
 	ctx := context.Background()
 	log := h.NewLogger(&appName, debugMode, &logFormat)
@@ -49,23 +46,16 @@ func main() {
 	ctx = context.WithValue(ctx, "roleService", roleService)
 	ctx = context.WithValue(ctx, "userService", userService)
 	ctx = context.WithValue(ctx, "authService", authService)
-	ctx = context.WithValue(ctx, "notificationHub", notificationHub)
 
 	graphqlSchema := graphql.MustParseSchema(schema.GetRootSchema(), &resolver.Resolver{})
 
 	http.Handle("/login", h.AddContext(ctx, h.Login()))
-
-	http.Handle("/ws", h.AddContext(ctx, h.Authenticate(h.WebSocket(notificationHub))))
 
 	loggerHandler := &h.LoggerHandler{debugMode, log}
 	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "graphiql.html")
-	}))
-
-	http.HandleFunc("/notification", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "notification.html")
 	}))
 
 	log.Fatal(http.ListenAndServe(":3000", nil))
