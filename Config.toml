@@ -1,6 +1,13 @@
 app-name = "go-graphql-starter"
 version = 1.0
 
+[db]
+host = "localhost"
+port = "5432"
+user = "postgres"
+password = "123456"
+dbname = "postgres"
+
 [log]
 debug-mode = true
 log-format = "%{color}%{time:2006/01/02 15:04:05 -07:00 MST} [%{level:.6s}] %{shortfile} : %{color:reset}%{message}"

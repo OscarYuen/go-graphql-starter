@@ -36,7 +36,12 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	first := int(*args.First)
 	users, err := ctx.Value("userService").(*service.UserService).List(&first, args.After)
 	count, err := ctx.Value("userService").(*service.UserService).Count()
-	ctx.Value("log").(*logging.Logger).Debugf("Retrieved users by user_id[%s] : %v", *userId, users)
+	ctx.Value("log").(*logging.Logger).Debugf("Retrieved users by user_id[%s] :", *userId)
+	if ctx.Value("debugMode").(bool) {
+		for _, user := range users {
+			ctx.Value("log").(*logging.Logger).Debugf("%v", *user)
+		}
+	}
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved total users count by user_id[%s] : %v", *userId, count)
 	if err != nil {
 		ctx.Value("log").(*logging.Logger).Errorf("Graphql error : %v", err)
