@@ -3,7 +3,6 @@ package resolver
 import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	graphql "github.com/neelance/graphql-go"
-	"strconv"
 	"time"
 )
 
@@ -12,7 +11,7 @@ type userResolver struct {
 }
 
 func (r *userResolver) ID() graphql.ID {
-	return graphql.ID(strconv.FormatInt(r.u.ID, 10))
+	return graphql.ID(r.u.ID)
 }
 
 func (r *userResolver) Email() *string {

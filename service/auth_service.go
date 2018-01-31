@@ -6,7 +6,6 @@ import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/op/go-logging"
-	"strconv"
 	"time"
 )
 
@@ -23,7 +22,7 @@ func NewAuthService(appName *string, signedSecret *string, expiredTimeInSecond *
 
 func (a *AuthService) SignJWT(user *model.User) (*string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":         base64.StdEncoding.EncodeToString([]byte(strconv.FormatInt(user.ID, 10))),
+		"id":         base64.StdEncoding.EncodeToString([]byte(user.ID)),
 		"created_at": user.CreatedAt,
 		"exp":        time.Now().Add(time.Second * *a.expiredTimeInSecond).Unix(),
 		"iss":        *a.appName,

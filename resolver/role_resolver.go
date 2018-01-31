@@ -3,7 +3,6 @@ package resolver
 import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/neelance/graphql-go"
-	"strconv"
 )
 
 type roleResolver struct {
@@ -11,7 +10,7 @@ type roleResolver struct {
 }
 
 func (r *roleResolver) ID() graphql.ID {
-	return graphql.ID(strconv.FormatInt(r.role.ID, 10))
+	return graphql.ID(r.role.ID)
 }
 
 func (r *roleResolver) Name() *string {

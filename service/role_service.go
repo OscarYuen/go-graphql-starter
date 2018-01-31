@@ -16,13 +16,13 @@ func NewRoleService(db *sqlx.DB, log *logging.Logger) *RoleService {
 	return &RoleService{db: db, log: log}
 }
 
-func (r *RoleService) FindByUserId(userId int64) ([]*model.Role, error) {
+func (r *RoleService) FindByUserId(userId *string) ([]*model.Role, error) {
 	roles := make([]*model.Role, 0)
 
 	roleSQL := `SELECT role.*
 	FROM roles role
 	INNER JOIN rel_users_roles ur ON role.id = ur.role_id
-	WHERE ur.user_id = ? `
+	WHERE ur.user_id = $1 `
 	err := r.db.Select(&roles, roleSQL, userId)
 	if err == sql.ErrNoRows {
 		return roles, nil

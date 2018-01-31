@@ -7,11 +7,11 @@ import (
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/jmoiron/sqlx"
 	"github.com/op/go-logging"
+	"github.com/satori/go.uuid"
 )
 
 const (
 	defaultListFetchSize = 10
-	defaultDecodedIndex  = 0
 )
 
 type UserService struct {
@@ -27,9 +27,7 @@ func NewUserService(db *sqlx.DB, roleService *RoleService, log *logging.Logger) 
 func (u *UserService) FindByEmail(email string) (*model.User, error) {
 	user := &model.User{}
 
-	userSQL := `SELECT user.*
-	FROM users user
-	WHERE user.email = ? `
+	userSQL := `SELECT * FROM users WHERE email = $1`
 	row := u.db.QueryRowx(userSQL, email)
 	err := row.StructScan(user)
 	if err == sql.ErrNoRows {
@@ -40,7 +38,7 @@ func (u *UserService) FindByEmail(email string) (*model.User, error) {
 		return nil, err
 	}
 
-	roles, err := u.roleService.FindByUserId(user.ID)
+	roles, err := u.roleService.FindByUserId(&user.ID)
 	if err != nil {
 		u.log.Errorf("Error in retrieving roles : %v", err)
 		return nil, err
@@ -50,7 +48,9 @@ func (u *UserService) FindByEmail(email string) (*model.User, error) {
 }
 
 func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
-	userSQL := `INSERT INTO users (email, password, ip_address) VALUES (:email, :password, :ip_address)`
+	uuid := uuid.Must(uuid.NewV4())
+	user.ID = uuid.String()
+	userSQL := `INSERT INTO users (id, email, password, ip_address) VALUES (:id, :email, :password, :ip_address)`
 	user.HashedPassword()
 	_, err := u.db.NamedExec(userSQL, user)
 	if err != nil {
@@ -61,12 +61,20 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 
 func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
 	users := make([]*model.User, 0)
-	decodedIndex, _ := DecodeCursor(after)
 	if first == nil {
 		*first = defaultListFetchSize
 	}
-	userSQL := `SELECT * FROM users WHERE id > ? - 1 LIMIT ? `
-	err := u.db.Select(&users, userSQL, decodedIndex, first)
+	if after != nil {
+		userSQL := `SELECT * FROM users WHERE created_at < (SELECT created_at FROM users WHERE id = $1) ORDER BY created_at DESC LIMIT $2;`
+		decodedIndex, _ := DecodeCursor(after)
+		err := u.db.Select(&users, userSQL, decodedIndex, first)
+		if err != nil {
+			return nil, err
+		}
+		return users, nil
+	}
+	userSQL := `SELECT * FROM users ORDER BY created_at DESC LIMIT $1;`
+	err := u.db.Select(&users, userSQL, first)
 	if err != nil {
 		return nil, err
 	}
