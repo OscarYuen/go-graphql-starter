@@ -82,24 +82,34 @@ localhost:3000
 
 Basically there are two graphql queries and one mutation
 
-Query:
-1. Get an user by email
+##### Query:
+1. Get a user by email
 2. Get user list by cursor pagination
 
-Mutation:
-1. Create an user
+##### Mutation:
 
-For user list query, you need to be authenticated in order to use it.
+To query a list of users, you need to be authenticated.
 Authentication is not required for other operations.
+In order to authenticate, here are the steps to follow:
 
-In order to perform authentication/login, you need to create a user by graphql mutation first
+1. Create a user
 
-Then you could submit your email and password by Basic Authorization Header with the following endpoint using POST method
+```graphql
+mutation {
+  createUser (email: "tester@tester.com", password: "123456") {
+    id
+  }
+}
 ```
-localhost:3000/login
-```
 
-After that, you would get an access token(jwt)
+2. Log in by submitting your email and password through a Basic Authorization Header.
+Here's an example on how to achieve this:
+   a. Download [Insomnia](https://insomnia.rest/)
+   b. Create a new POST request, paste `localhost:3000/login` in the URL bar and go to the Header tab
+   c. Generate your basic Authorization on [blitter.se](https://www.blitter.se/utils/basic-authentication-header-generator/)
+   d. In Insomnia, first column, type Authorization, second column enter the Basic you just copied `Basic dGVzdGVyQHRlc3Rlci5jb206a3Rta3Rt`
+   e. Click send, you should get a jwt token back.
+
 You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
 
 #### Test:
