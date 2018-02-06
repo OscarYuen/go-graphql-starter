@@ -14,7 +14,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
 - [ ] Support web-socket notification and messaging
 
 #### Structure
-    ```
     go-graphql-starer
     │   README.md
     │   test.db             --- the temporary testing database for demo
@@ -39,7 +38,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     │       └───...         --- graphql schema files in *.graphql format
     └───service             --- services for users, authorization etc.
     └───util                --- utilities
-    ```
 
 #### Usage:
 
@@ -76,33 +74,49 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     
 #### Graphql Example:
 
-    Test in graphiql by the following endpoint
+Test in graphiql by the following endpoint
 
-    ```
-    localhost:3000
-    ```
+```
+localhost:3000
+```
 
-    Basically there are two graphql queries and one mutation
+Basically there are two graphql queries and one mutation
 
-    Query:
-    1. Get an user by email
-    2. Get user list by cursor pagination
+##### Query:
+1. Get a user by email
+2. Get user list by cursor pagination
 
-    Mutation:
-    1. Create an user
+##### Mutation:
 
-    For user list query, you need to be authenticated in order to use it.
-    Authentication is not required for other operations.
+To query a list of users, you need to be authenticated.
+Authentication is not required for other operations.
+In order to authenticate, here are the steps to follow:
 
-    In order to perform authentication/login, you need to create a user by graphql mutation first
+1. Create a user
 
-    Then you could submit your email and password by Basic Authorization Header with the following endpoint using POST method
-    ```
-    localhost:3000/login
-    ```
+```graphql
+mutation {
+  createUser (email: "tester@tester.com", password: "123456") {
+    id
+  }
+}
+```
 
-    After that, you would get an access token(jwt)
-    You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
+2. Log in by submitting your email and password through a Basic Authorization Header.
+
+Here's an example on how to achieve this:
+
+       a. Download [Insomnia](https://insomnia.rest/) OR Other RESTful endpoint testing tools e.g. Postman
+
+       b. Create a new POST request, paste `localhost:3000/login` in the URL bar and go to the Header tab
+
+       c. Generate your basic Authorization on [blitter.se](https://www.blitter.se/utils/basic-authentication-header-generator/)
+
+       d. In Insomnia, first column, type Authorization, second column enter the Basic you just copied `Basic dGVzdGVyQHRlc3Rlci5jb206a3Rta3Rt`
+
+       e. Click send, you should get a jwt token back.
+
+You can change the Authorization of request header in `graphiql.html` and restart the server to see the effect of authentication using token
 
 #### Test:
 
@@ -113,6 +127,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     
 #### Reference
 
-    -[neelance/graphql-go](https://github.com/neelance/graphql-go)
+-[neelance/graphql-go](https://github.com/neelance/graphql-go)
 
-    -[tonyghita/graphql-go-example](https://github.com/tonyghita/graphql-go-example)
+-[tonyghita/graphql-go-example](https://github.com/tonyghita/graphql-go-example)
