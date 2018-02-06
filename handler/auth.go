@@ -12,7 +12,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -20,7 +19,7 @@ func Authenticate(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var (
 			isAuthorized = false
-			userId       int64
+			userId       string
 		)
 		ctx := r.Context()
 		token, err := validateBearerAuthHeader(ctx, r)
@@ -28,7 +27,7 @@ func Authenticate(h http.Handler) http.Handler {
 			isAuthorized = true
 			if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 				userIdByte, _ := base64.StdEncoding.DecodeString(claims["id"].(string))
-				userId, _ = strconv.ParseInt(string(userIdByte[:]), 10, 64)
+				userId = string(userIdByte[:])
 			} else {
 				log.Println(err)
 			}

@@ -1,6 +1,6 @@
 package model
 
 type Role struct {
-	ID   int64
+	ID   string
 	Name string
 }

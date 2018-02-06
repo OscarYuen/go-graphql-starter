@@ -17,31 +17,39 @@ import (
 )
 
 func main() {
-	db, err := config.OpenDB("test.db")
-	if err != nil {
-		log.Fatalf("Unable to connect to db: %s \n", err)
-	}
 	viper.SetConfigName("Config")
 	viper.AddConfigPath(".")
-	err = viper.ReadInConfig()
+	err := viper.ReadInConfig()
 	if err != nil {
 		log.Fatalf("Fatal error config file: %s \n", err)
 	}
 
 	var (
-		appName             = viper.Get("app-name").(string)
+		appName = viper.Get("app-name").(string)
+
+		host     = viper.Get("db.host").(string)
+		port     = viper.Get("db.port").(string)
+		user     = viper.Get("db.user").(string)
+		password = viper.Get("db.password").(string)
+		dbname   = viper.Get("db.dbname").(string)
+
 		signedSecret        = viper.Get("auth.jwt-secret").(string)
 		expiredTimeInSecond = time.Duration(viper.Get("auth.jwt-expire-in").(int64))
-		debugMode           = viper.Get("log.debug-mode").(bool)
-		logFormat           = viper.Get("log.log-format").(string)
-	)
 
+		debugMode = viper.Get("log.debug-mode").(bool)
+		logFormat = viper.Get("log.log-format").(string)
+	)
+	db, err := config.OpenDB(host, port, user, password, dbname)
+	if err != nil {
+		log.Fatalf("Unable to connect to db: %s \n", err)
+	}
 	ctx := context.Background()
 	log := h.NewLogger(&appName, debugMode, &logFormat)
 	roleService := service.NewRoleService(db, log)
 	userService := service.NewUserService(db, roleService, log)
 	authService := service.NewAuthService(&appName, &signedSecret, &expiredTimeInSecond, log)
 
+	ctx = context.WithValue(ctx, "debugMode", debugMode)
 	ctx = context.WithValue(ctx, "log", log)
 	ctx = context.WithValue(ctx, "roleService", roleService)
 	ctx = context.WithValue(ctx, "userService", userService)

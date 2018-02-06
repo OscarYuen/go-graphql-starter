@@ -1,6 +1,0 @@
-CREATE TABLE roles
-(
-  id   INTEGER PRIMARY KEY AUTOINCREMENT,
-  name VARCHAR(45)
-);
-

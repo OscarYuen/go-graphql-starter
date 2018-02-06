@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  psqldata:
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
+    volumes:
+      - /psqldata:/var/lib/postgresql/data
+      - ./data/1.0/1_users.sql:/docker-entrypoint-initdb.d/1_usrs.sql
+      - ./data/1.0/2_roles.sql:/docker-entrypoint-initdb.d/2_roles.sql
+      - ./data/1.0/3_rel_users_roles.sql:/docker-entrypoint-initdb.d/3_rel_users_roles.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  go-graphql-starter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:3000

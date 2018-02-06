@@ -1,10 +1,6 @@
 required = ["github.com/jteeuwen/go-bindata"]
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/OscarYuen/go-graphql-starter"
-
-[[constraint]]
   name = "github.com/dgrijalva/jwt-go"
   version = "3.1.0"
 
@@ -39,3 +35,11 @@ required = ["github.com/jteeuwen/go-bindata"]
 [[constraint]]
   name = "github.com/spf13/viper"
   version = "v1.0.0"
+
+[[constraint]]
+  name = "github.com/satori/go.uuid"
+  branch = "master"
+
+[[constraint]]
+  name = "github.com/lib/pq"
+  branch = "master"
