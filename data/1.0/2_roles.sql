@@ -1,6 +1,6 @@
 CREATE TABLE roles
 (
-  id   UUID PRIMARY KEY PRIMARY KEY,
+  id   UUID PRIMARY KEY,
   name VARCHAR(45)
 );
 

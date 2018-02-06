@@ -25,19 +25,19 @@ func main() {
 	}
 
 	var (
-		appName             = viper.Get("app-name").(string)
+		appName = viper.Get("app-name").(string)
 
-		host                = viper.Get("db.host").(string)
-		port                = viper.Get("db.port").(string)
-		user                = viper.Get("db.user").(string)
-		password            = viper.Get("db.password").(string)
-		dbname              = viper.Get("db.dbname").(string)
+		host     = viper.Get("db.host").(string)
+		port     = viper.Get("db.port").(string)
+		user     = viper.Get("db.user").(string)
+		password = viper.Get("db.password").(string)
+		dbname   = viper.Get("db.dbname").(string)
 
 		signedSecret        = viper.Get("auth.jwt-secret").(string)
 		expiredTimeInSecond = time.Duration(viper.Get("auth.jwt-expire-in").(int64))
 
-		debugMode           = viper.Get("log.debug-mode").(bool)
-		logFormat           = viper.Get("log.log-format").(string)
+		debugMode = viper.Get("log.debug-mode").(bool)
+		logFormat = viper.Get("log.log-format").(string)
 	)
 	db, err := config.OpenDB(host, port, user, password, dbname)
 	if err != nil {
