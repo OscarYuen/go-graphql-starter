@@ -5,17 +5,22 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"log"
+	"time"
 )
 
 func OpenDB(host string, port string, user string, password string, dbname string) (*sqlx.DB, error) {
-	log.Println("Database is initializing... ")
-	db, err := sqlx.Connect("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname))
-	log.Println("Database is initialized ")
+	log.Println("Database is connecting... ")
+	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname))
+
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
+
 	if err = db.Ping(); err != nil {
-		return nil, err
+		log.Println("Retry database connection in 5 seconds... ")
+		time.Sleep(time.Duration(5) * time.Second)
+		return OpenDB(host, port, user, password, dbname)
 	}
+	log.Println("Database is connected ")
 	return db, nil
 }

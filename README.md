@@ -6,7 +6,7 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
 - [x] Integrated with sqlx
 - [x] Integrated with graphql-go
 - [x] Use go-bindata to generate Go code from .graphql file
-- [ ] Use psql
+- [x] Use psql
 - [x] Integrated with dataloader
 - [x] Add authentication & authorization
 - [ ] Add unit test cases
@@ -16,7 +16,6 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
 #### Structure
     go-graphql-starer
     │   README.md
-    │   test.db             --- the temporary testing database for demo
     │   server.go           --- the entry file
     │   Config.toml         --- the configuration file for setting server parameter
     │   Dockerfile
@@ -38,15 +37,24 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     │       └───...         --- graphql schema files in *.graphql format
     └───service             --- services for users, authorization etc.
     └───util                --- utilities
+    
+#### Requirement:
 
-#### Usage:
+1. Postgres database
+2. Golang
 
-1. Install go-bindata
+Remark: If you want to use other databases, please feel free to change the driver in `config/db.go`
+
+#### Usage(Without docker):
+
+1. Run the sql scripts under `data/1.0` folder inside Postgres database console
+
+2. Install go-bindata
     ```
     go get -u github.com/jteeuwen/go-bindata/...
     ```
 
-2. Setup GOPATH
+3. Setup GOPATH (Optional if already set)
 
     For example: MacOS
     ```
@@ -54,7 +62,7 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     export PATH=$PATH:$GOPATH/bin
     ```
 
-3. Run the following command at root directory to generate Go code from .graphql file
+4. Run the following command at root directory to generate Go code from .graphql file
     ```
     go-bindata -ignore=\.go -pkg=schema -o=schema/bindata.go schema/...
     ```
@@ -66,12 +74,35 @@ This project aims to use [neelance/graphql-go](https://github.com/neelance/graph
     ```
     There would be bindata.go generated under `schema` folder
 
-
-4. Start the server
+5. Start the server (Ensure your postgres database is live and its setting in Config.toml is correct)
     ```
     go build server.go
     ```
     
+#### Usage(With docker):
+
+1. Run the sql scripts under `data/1.0` folder inside Postgres database console
+
+2. Build docker image
+    ```
+    docker build -t go-graphql-starter .
+    ```
+
+3. Run docker image (Ensure your database setting in Config.toml is correct)
+    ```
+    docker run go-graphql-starter
+    ```
+
+#### Usage(With docker-compose):
+
+1. Create a folder `/psqldata` on your OS system and set it for file sharing in docker
+
+2. Create and starter services by docker-compose
+    ```
+    docker-compose up
+    ```
+    
+        
 #### Graphql Example:
 
 Test in graphiql by the following endpoint

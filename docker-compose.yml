@@ -4,6 +4,15 @@ volumes:
   psqldata:
 
 services:
+  go-graphql-starter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "postgres"
+
   postgres:
     image: postgres
     environment:
@@ -18,10 +27,3 @@ services:
     ports:
       - "5432:5432"
     restart: unless-stopped
-
-  go-graphql-starter:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports: 
-      - 3000:3000
