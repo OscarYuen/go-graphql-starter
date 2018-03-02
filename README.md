@@ -1,4 +1,6 @@
 ## Go Graphql Starter
+[![GitHub license](https://img.shields.io/github/license/OscarYuen/go-graphql-starter.svg)](https://github.com/OscarYuen/go-graphql-starter/blob/master/LICENSE)
+
 
 This project aims to use [neelance/graphql-go](https://github.com/neelance/graphql-go) to build a starter web application. This project would be continuously under development. Pull request is welcome. 
 
