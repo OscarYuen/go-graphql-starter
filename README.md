@@ -2,7 +2,13 @@
 [![GitHub license](https://img.shields.io/github/license/OscarYuen/go-graphql-starter.svg)](https://github.com/OscarYuen/go-graphql-starter/blob/master/LICENSE)
 
 
-This project aims to use [graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go) to build a starter web application. This project would be continuously under development. Pull request is welcome. 
+This project aims to use [graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go) to build a starter web application. This project has already been used as backend application in production. 
+
+In case you need to get called from another frontend side, CORS may needed to be enabled in this application as this project mainly focuses on backend logic at this stage. 
+
+
+This project would be continuously under development for enhancement. Pull request is welcome. 
+
 
 #### RoadMap:
 - [x] Integrated with sqlx
@@ -160,6 +166,6 @@ You can change the Authorization of request header in `graphiql.html` and restar
     
 #### Reference
 
--[neelance/graphql-go](https://github.com/neelance/graphql-go)
+-[graph-gophers/graphql-go](https://github.com/graph-gophers/graphql-go)
 
 -[tonyghita/graphql-go-example](https://github.com/tonyghita/graphql-go-example)

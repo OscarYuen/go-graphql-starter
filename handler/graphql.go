@@ -3,7 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"github.com/OscarYuen/go-graphql-starter/loader"
-	"github.com/neelance/graphql-go"
+	"github.com/graph-gophers/graphql-go"
 	"net/http"
 )
 

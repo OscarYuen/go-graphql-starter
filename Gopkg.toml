@@ -1,3 +1,28 @@
+# Gopkg.toml example
+#
+# Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
+# for detailed Gopkg.toml documentation.
+#
+# required = ["github.com/user/thing/cmd/thing"]
+# ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
+#
+# [[constraint]]
+#   name = "github.com/user/project"
+#   version = "1.0.0"
+#
+# [[constraint]]
+#   name = "github.com/user/project2"
+#   branch = "dev"
+#   source = "github.com/myfork/project2"
+#
+# [[override]]
+#   name = "github.com/x/y"
+#   version = "2.4.0"
+#
+# [prune]
+#   non-go = false
+#   go-tests = true
+#   unused-packages = true
 required = ["github.com/jteeuwen/go-bindata"]
 
 [[constraint]]
@@ -5,20 +30,28 @@ required = ["github.com/jteeuwen/go-bindata"]
   version = "3.1.0"
 
 [[constraint]]
-  name = "github.com/gorilla/websocket"
-  version = "1.2.0"
+  branch = "master"
+  name = "github.com/graph-gophers/graphql-go"
 
 [[constraint]]
   branch = "master"
   name = "github.com/jmoiron/sqlx"
 
 [[constraint]]
-  name = "github.com/mattn/go-sqlite3"
-  version = "1.6.0"
+  branch = "master"
+  name = "github.com/lib/pq"
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/neelance/graphql-go"
+  name = "github.com/op/go-logging"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/satori/go.uuid"
+  revision = "master"
+
+[[constraint]]
+  name = "github.com/spf13/viper"
+  revision = "master"
 
 [[constraint]]
   branch = "master"
@@ -30,16 +63,8 @@ required = ["github.com/jteeuwen/go-bindata"]
 
 [[constraint]]
   name = "gopkg.in/nicksrandall/dataloader.v5"
-  version = "v5"
+  version = "5.0.0"
 
-[[constraint]]
-  name = "github.com/spf13/viper"
-  version = "v1.0.0"
-
-[[constraint]]
-  name = "github.com/satori/go.uuid"
-  branch = "master"
-
-[[constraint]]
-  name = "github.com/lib/pq"
-  branch = "master"
+[prune]
+  go-tests = true
+  unused-packages = true

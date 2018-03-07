@@ -10,7 +10,7 @@ import (
 	"net/http"
 
 	"github.com/OscarYuen/go-graphql-starter/loader"
-	graphql "github.com/neelance/graphql-go"
+	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/spf13/viper"
 	"golang.org/x/net/context"
 	"time"
