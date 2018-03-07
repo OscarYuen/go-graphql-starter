@@ -16,4 +16,4 @@ log-format = "%{color}%{time:2006/01/02 15:04:05 -07:00 MST} [%{level:.6s}] %{sh
 #jwt sign secret
 jwt-secret = "1234"
 #jwt expired time in second
-jwt-expire-in = 40000
+jwt-expire-in = "40000s"

@@ -3,11 +3,11 @@ package service
 import (
 	"database/sql"
 	"errors"
-	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/context"
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/jmoiron/sqlx"
 	"github.com/op/go-logging"
-	"github.com/satori/go.uuid"
+	"github.com/rs/xid"
 )
 
 const (
@@ -48,8 +48,8 @@ func (u *UserService) FindByEmail(email string) (*model.User, error) {
 }
 
 func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
-	uuid := uuid.Must(uuid.NewV4())
-	user.ID = uuid.String()
+	userId := xid.New()
+	user.ID = userId.String()
 	userSQL := `INSERT INTO users (id, email, password, ip_address) VALUES (:id, :email, :password, :ip_address)`
 	user.HashedPassword()
 	_, err := u.db.NamedExec(userSQL, user)
@@ -94,10 +94,10 @@ func (u *UserService) Count() (int, error) {
 func (u *UserService) ComparePassword(userCredentials *model.UserCredentials) (*model.User, error) {
 	user, err := u.FindByEmail(userCredentials.Email)
 	if err != nil {
-		return nil, errors.New(config.UnauthorizedAccess)
+		return nil, errors.New(context.UnauthorizedAccess)
 	}
 	if result := user.ComparePassword(userCredentials.Password); !result {
-		return nil, errors.New(config.UnauthorizedAccess)
+		return nil, errors.New(context.UnauthorizedAccess)
 	}
 	return user, nil
 }

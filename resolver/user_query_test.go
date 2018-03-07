@@ -1,7 +1,7 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/config"
+	"github.com/OscarYuen/go-graphql-starter/context"
 	"github.com/OscarYuen/go-graphql-starter/schema"
 	"github.com/OscarYuen/go-graphql-starter/service"
 	"github.com/graph-gophers/graphql-go"
@@ -15,7 +15,7 @@ var rootSchema = graphql.MustParseSchema(schema.GetRootSchema(), &Resolver{})
 var ctx context.Context
 
 func init() {
-	db, err := config.OpenDB("../test.db")
+	db, err := context.OpenDB("../test.db")
 	if err != nil {
 		log.Fatal(err)
 	}

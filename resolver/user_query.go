@@ -2,7 +2,7 @@ package resolver
 
 import (
 	"errors"
-	"github.com/OscarYuen/go-graphql-starter/config"
+	gcontext "github.com/OscarYuen/go-graphql-starter/context"
 	"github.com/OscarYuen/go-graphql-starter/loader"
 	"github.com/OscarYuen/go-graphql-starter/service"
 	"github.com/op/go-logging"
@@ -29,7 +29,7 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	After *string
 }) (*usersConnectionResolver, error) {
 	if isAuthorized := ctx.Value("is_authorized").(bool); !isAuthorized {
-		return nil, errors.New(config.CredentialsError)
+		return nil, errors.New(gcontext.CredentialsError)
 	}
 	userId := ctx.Value("user_id").(*string)
 
@@ -37,7 +37,8 @@ func (r *Resolver) Users(ctx context.Context, args struct {
 	users, err := ctx.Value("userService").(*service.UserService).List(&first, args.After)
 	count, err := ctx.Value("userService").(*service.UserService).Count()
 	ctx.Value("log").(*logging.Logger).Debugf("Retrieved users by user_id[%s] :", *userId)
-	if ctx.Value("debugMode").(bool) {
+	config := ctx.Value("debugMode").(*gcontext.Config)
+	if config.DebugMode {
 		for _, user := range users {
 			ctx.Value("log").(*logging.Logger).Debugf("%v", *user)
 		}

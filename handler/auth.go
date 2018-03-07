@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/OscarYuen/go-graphql-starter/config"
+	gcontext "github.com/OscarYuen/go-graphql-starter/context"
 	"github.com/OscarYuen/go-graphql-starter/model"
 	"github.com/OscarYuen/go-graphql-starter/service"
 	jwt "github.com/dgrijalva/jwt-go"
@@ -53,7 +53,7 @@ func Login() http.Handler {
 		if r.Method != http.MethodPost {
 			response := &model.Response{
 				Code:  http.StatusMethodNotAllowed,
-				Error: config.PostMethodSupported,
+				Error: gcontext.PostMethodSupported,
 			}
 			loginResponse.Response = response
 			writeResponse(w, loginResponse, loginResponse.Code)
@@ -84,7 +84,7 @@ func Login() http.Handler {
 		if err != nil {
 			response := &model.Response{
 				Code:  http.StatusBadRequest,
-				Error: config.TokenError,
+				Error: gcontext.TokenError,
 			}
 			loginResponse.Response = response
 			writeResponse(w, loginResponse, loginResponse.Code)
@@ -109,12 +109,12 @@ func writeResponse(w http.ResponseWriter, response interface{}, code int) {
 func validateBasicAuthHeader(r *http.Request) (*model.UserCredentials, error) {
 	auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 	if len(auth) != 2 || auth[0] != "Basic" {
-		return nil, errors.New(config.CredentialsError)
+		return nil, errors.New(gcontext.CredentialsError)
 	}
 	payload, _ := base64.StdEncoding.DecodeString(auth[1])
 	pair := strings.SplitN(string(payload), ":", 2)
 	if len(pair) != 2 {
-		return nil, errors.New(config.CredentialsError)
+		return nil, errors.New(gcontext.CredentialsError)
 	}
 	userCredentials := model.UserCredentials{
 		Email:    pair[0],
@@ -129,7 +129,7 @@ func validateBearerAuthHeader(ctx context.Context, r *http.Request) (*jwt.Token,
 	if !ok || len(keys) < 1 {
 		auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 		if len(auth) != 2 || auth[0] != "Bearer" {
-			return nil, errors.New(config.CredentialsError)
+			return nil, errors.New(gcontext.CredentialsError)
 		}
 		tokenString = auth[1]
 	} else {

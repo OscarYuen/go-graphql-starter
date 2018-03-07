@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"github.com/OscarYuen/go-graphql-starter/context"
 )
 
 type LoggerHandler struct {
@@ -13,19 +14,19 @@ type LoggerHandler struct {
 	Logger    *logging.Logger
 }
 
-func NewLogger(appName *string, debugMode bool, logFormat *string) *logging.Logger {
+func NewLogger(config *context.Config) *logging.Logger {
 	backend := logging.NewLogBackend(os.Stderr, "", 0)
-	format := logging.MustStringFormatter(*logFormat)
+	format := logging.MustStringFormatter(config.LogFormat)
 	backendFormatter := logging.NewBackendFormatter(backend, format)
 
 	backendLeveled := logging.AddModuleLevel(backendFormatter)
 	backendLeveled.SetLevel(logging.INFO, "")
-	if debugMode {
+	if config.DebugMode {
 		backendLeveled.SetLevel(logging.DEBUG, "")
 	}
 
 	logging.SetBackend(backendLeveled)
-	logger := logging.MustGetLogger(*appName)
+	logger := logging.MustGetLogger(config.AppName)
 	return logger
 }
 

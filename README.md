@@ -30,7 +30,7 @@ This project would be continuously under development for enhancement. Pull reque
     │   Gopkg.lock          --- generated file from dependency management tool, dep
     │   Gopkg.toml          --- generated file from dependency management tool, dep
     │   graphiql.html       --- the html for graphiql which is used for testing query & mutation
-    └───config              --- configuration utilities like db
+    └───context             --- application context like db configuration
     └───data                --- storing the sql data patch for different version
     │   └───1.0             --- storing sql data patch for version 1.0
     │      └───...          --- sql files

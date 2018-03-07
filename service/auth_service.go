@@ -7,6 +7,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/op/go-logging"
 	"time"
+	"github.com/OscarYuen/go-graphql-starter/context"
 )
 
 type AuthService struct {
@@ -16,8 +17,8 @@ type AuthService struct {
 	log                 *logging.Logger
 }
 
-func NewAuthService(appName *string, signedSecret *string, expiredTimeInSecond *time.Duration, log *logging.Logger) *AuthService {
-	return &AuthService{appName, signedSecret, expiredTimeInSecond, log}
+func NewAuthService(config *context.Config, log *logging.Logger) *AuthService {
+	return &AuthService{&config.AppName, &config.JWTSecret, &config.JWTExpireIn, log}
 }
 
 func (a *AuthService) SignJWT(user *model.User) (*string, error) {
