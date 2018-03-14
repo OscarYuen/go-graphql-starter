@@ -1,7 +1,7 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/context"
+	gcontext "github.com/OscarYuen/go-graphql-starter/context"
 	"github.com/OscarYuen/go-graphql-starter/schema"
 	"github.com/OscarYuen/go-graphql-starter/service"
 	"github.com/graph-gophers/graphql-go"
@@ -11,15 +11,20 @@ import (
 	"testing"
 )
 
-var rootSchema = graphql.MustParseSchema(schema.GetRootSchema(), &Resolver{})
-var ctx context.Context
+var (
+	rootSchema = graphql.MustParseSchema(schema.GetRootSchema(), &Resolver{})
+	ctx        context.Context
+)
 
 func init() {
-	db, err := context.OpenDB("../test.db")
+	config := gcontext.LoadConfig("../")
+	db, err := gcontext.OpenDB(config)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Unable to connect to db: %s \n", err)
 	}
-	userService := service.NewUserService(db)
+	log := service.NewLogger(config)
+	roleService := service.NewRoleService(db, log)
+	userService := service.NewUserService(db, roleService, log)
 	ctx = context.WithValue(context.Background(), "userService", userService)
 }
 

@@ -15,14 +15,14 @@ import (
 )
 
 func main() {
-	config := gcontext.LoadConfig()
+	config := gcontext.LoadConfig(".")
 
 	db, err := gcontext.OpenDB(config)
 	if err != nil {
 		log.Fatalf("Unable to connect to db: %s \n", err)
 	}
 	ctx := context.Background()
-	log := h.NewLogger(config)
+	log := service.NewLogger(config)
 	roleService := service.NewRoleService(db, log)
 	userService := service.NewUserService(db, roleService, log)
 	authService := service.NewAuthService(config, log)
@@ -37,7 +37,7 @@ func main() {
 
 	http.Handle("/login", h.AddContext(ctx, h.Login()))
 
-	loggerHandler := &h.LoggerHandler{config.DebugMode, log}
+	loggerHandler := &h.LoggerHandler{config.DebugMode}
 	http.Handle("/query", h.AddContext(ctx, loggerHandler.Logging(h.Authenticate(&h.GraphQL{Schema: graphqlSchema, Loaders: loader.NewLoaderCollection()}))))
 
 	http.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

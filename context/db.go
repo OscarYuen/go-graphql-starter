@@ -24,4 +24,3 @@ func OpenDB(config *Config) (*sqlx.DB, error) {
 	log.Println("Database is connected ")
 	return db, nil
 }
-
