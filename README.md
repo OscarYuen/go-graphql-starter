@@ -51,7 +51,7 @@ This project would be continuously under development for enhancement. Pull reque
 1. Postgres database
 2. Golang
 
-Remark: If you want to use other databases, please feel free to change the driver in `config/db.go`
+Remark: If you want to use other databases, please feel free to change the driver in `context/db.go`
 
 #### Usage(Without docker):
 
