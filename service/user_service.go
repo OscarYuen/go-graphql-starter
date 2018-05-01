@@ -8,6 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/op/go-logging"
 	"github.com/rs/xid"
+	"log"
 )
 
 const (
@@ -28,7 +29,8 @@ func (u *UserService) FindByEmail(email string) (*model.User, error) {
 	user := &model.User{}
 
 	userSQL := `SELECT * FROM users WHERE email = $1`
-	row := u.db.QueryRowx(userSQL, email)
+	udb := u.db.Unsafe()
+	row := udb.QueryRowx(userSQL, email)
 	err := row.StructScan(user)
 	if err == sql.ErrNoRows {
 		return user, nil
@@ -59,22 +61,26 @@ func (u *UserService) CreateUser(user *model.User) (*model.User, error) {
 	return user, nil
 }
 
-func (u *UserService) List(first *int, after *string) ([]*model.User, error) {
+func (u *UserService) List(first *int32, after *string) ([]*model.User, error) {
 	users := make([]*model.User, 0)
+	var fetchSize int32
 	if first == nil {
-		*first = defaultListFetchSize
+		fetchSize = defaultListFetchSize
+	} else {
+		fetchSize = *first
 	}
+
 	if after != nil {
 		userSQL := `SELECT * FROM users WHERE created_at < (SELECT created_at FROM users WHERE id = $1) ORDER BY created_at DESC LIMIT $2;`
 		decodedIndex, _ := DecodeCursor(after)
-		err := u.db.Select(&users, userSQL, decodedIndex, first)
+		err := u.db.Select(&users, userSQL, decodedIndex, fetchSize)
 		if err != nil {
 			return nil, err
 		}
 		return users, nil
 	}
 	userSQL := `SELECT * FROM users ORDER BY created_at DESC LIMIT $1;`
-	err := u.db.Select(&users, userSQL, first)
+	err := u.db.Select(&users, userSQL, fetchSize)
 	if err != nil {
 		return nil, err
 	}

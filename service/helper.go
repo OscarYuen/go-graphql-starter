@@ -8,7 +8,7 @@ import (
 )
 
 func EncodeCursor(i *string) graphql.ID {
-	return graphql.ID(base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("cursor%s", i))))
+	return graphql.ID(base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("cursor%s", *i))))
 }
 
 func DecodeCursor(after *string) (*string, error) {
