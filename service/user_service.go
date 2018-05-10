@@ -8,7 +8,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/op/go-logging"
 	"github.com/rs/xid"
-	"log"
 )
 
 const (
