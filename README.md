@@ -38,7 +38,7 @@ This project would be continuously under development for enhancement. Pull reque
     └───loader              --- implementation of dataloader for caching and batching the graphql query
     └───model               --- the folder putting struct file
     └───resolver            --- implementation of graphql resolvers
-    └───schema              --- implementation of graphql resolvers
+    └───schema              --- definition of graphql schemas
     │   │   schema.go       --- used for generate go code from static graphql files inside 'type' folder
     │   │   schema.graphql  --- graphql root schema
     │   └───type            --- folder for storing graphql schema in *.graphql format
