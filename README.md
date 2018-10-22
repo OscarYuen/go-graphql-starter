@@ -82,7 +82,12 @@ Remark: If you want to use other databases, please feel free to change the drive
     ```
     There would be bindata.go generated under `schema` folder
 
-5. Start the server (Ensure your postgres database is live and its setting in Config.toml is correct)
+5. Download the requirements
+    ```
+    go get -v ./
+    ```
+
+6. Start the server (Ensure your postgres database is live and its setting in Config.toml is correct)
     ```
     go build server.go
     ```
