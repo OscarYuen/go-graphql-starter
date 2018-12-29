@@ -1,6 +1,6 @@
 package resolver
 
-import "github.com/graph-gophers/graphql-go"
+import graphql "github.com/graph-gophers/graphql-go"
 
 type pageInfoResolver struct {
 	startCursor graphql.ID

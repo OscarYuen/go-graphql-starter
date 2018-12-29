@@ -1,9 +1,10 @@
 package service
 
 import (
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/model"
 	"testing"
+	
+	gcontext "go-graphql-starter/context"
+	model "go-graphql-starter/model"
 )
 
 var (

@@ -1,12 +1,14 @@
 package resolver
 
 import (
+	"context"
 	"errors"
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/loader"
-	"github.com/OscarYuen/go-graphql-starter/service"
+
+	gcontext "go-graphql-starter/context"
+	loader "go-graphql-starter/loader"
+	service "go-graphql-starter/service"
+
 	"github.com/op/go-logging"
-	"golang.org/x/net/context"
 )
 
 func (r *Resolver) User(ctx context.Context, args struct {

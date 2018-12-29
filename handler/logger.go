@@ -2,9 +2,10 @@ package handler
 
 import (
 	"bytes"
-	"github.com/op/go-logging"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/op/go-logging"
 )
 
 type LoggerHandler struct {

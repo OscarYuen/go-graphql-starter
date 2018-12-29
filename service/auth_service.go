@@ -3,11 +3,13 @@ package service
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/model"
+	"time"
+
+	gcontext "go-graphql-starter/context"
+	model "go-graphql-starter/model"
+
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/op/go-logging"
-	"time"
 )
 
 type AuthService struct {
@@ -17,7 +19,7 @@ type AuthService struct {
 	log                 *logging.Logger
 }
 
-func NewAuthService(config *context.Config, log *logging.Logger) *AuthService {
+func NewAuthService(config *gcontext.Config, log *logging.Logger) *AuthService {
 	return &AuthService{&config.AppName, &config.JWTSecret, &config.JWTExpireIn, log}
 }
 

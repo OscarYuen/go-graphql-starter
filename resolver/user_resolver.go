@@ -1,9 +1,11 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
-	graphql "github.com/graph-gophers/graphql-go"
 	"time"
+
+	model "go-graphql-starter/model"
+
+	graphql "github.com/graph-gophers/graphql-go"
 )
 
 type userResolver struct {

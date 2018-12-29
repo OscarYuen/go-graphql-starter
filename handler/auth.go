@@ -1,18 +1,20 @@
 package handler
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/OscarYuen/go-graphql-starter/service"
-	jwt "github.com/dgrijalva/jwt-go"
-	"golang.org/x/net/context"
 	"log"
 	"net"
 	"net/http"
 	"strings"
+
+	gcontext "go-graphql-starter/context"
+	model "go-graphql-starter/model"
+	service "go-graphql-starter/service"
+
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 func Authenticate(h http.Handler) http.Handler {

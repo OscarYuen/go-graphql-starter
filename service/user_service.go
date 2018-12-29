@@ -1,10 +1,13 @@
 package service
 
 import (
-	"database/sql"
 	"errors"
-	"github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/OscarYuen/go-graphql-starter/model"
+
+	"database/sql"
+
+	gcontext "go-graphql-starter/context"
+	model "go-graphql-starter/model"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/op/go-logging"
 	"github.com/rs/xid"
@@ -99,10 +102,10 @@ func (u *UserService) Count() (int, error) {
 func (u *UserService) ComparePassword(userCredentials *model.UserCredentials) (*model.User, error) {
 	user, err := u.FindByEmail(userCredentials.Email)
 	if err != nil {
-		return nil, errors.New(context.UnauthorizedAccess)
+		return nil, errors.New(gcontext.UnauthorizedAccess)
 	}
 	if result := user.ComparePassword(userCredentials.Password); !result {
-		return nil, errors.New(context.UnauthorizedAccess)
+		return nil, errors.New(gcontext.UnauthorizedAccess)
 	}
 	return user, nil
 }

@@ -1,12 +1,14 @@
 package service
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/context"
-	"github.com/op/go-logging"
 	"os"
+
+	gcontext "go-graphql-starter/context"
+
+	"github.com/op/go-logging"
 )
 
-func NewLogger(config *context.Config) *logging.Logger {
+func NewLogger(config *gcontext.Config) *logging.Logger {
 	backend := logging.NewLogBackend(os.Stderr, "", 0)
 	format := logging.MustStringFormatter(config.LogFormat)
 	backendFormatter := logging.NewBackendFormatter(backend, format)

@@ -3,8 +3,9 @@ package service
 import (
 	"encoding/base64"
 	"fmt"
-	graphql "github.com/graph-gophers/graphql-go"
 	"strings"
+
+	graphql "github.com/graph-gophers/graphql-go"
 )
 
 func EncodeCursor(i *string) graphql.ID {

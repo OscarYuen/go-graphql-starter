@@ -1,8 +1,8 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/OscarYuen/go-graphql-starter/service"
+	model "go-graphql-starter/model"
+	service "go-graphql-starter/service"
 )
 
 type usersConnectionResolver struct {

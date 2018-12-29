@@ -1,9 +1,10 @@
 package loader
 
 import (
+	"context"
 	"fmt"
-	"golang.org/x/net/context"
-	"gopkg.in/nicksrandall/dataloader.v5"
+
+	"github.com/graph-gophers/dataloader"
 )
 
 type key string

@@ -1,17 +1,18 @@
 package main
 
 import (
-	gcontext "github.com/OscarYuen/go-graphql-starter/context"
-	h "github.com/OscarYuen/go-graphql-starter/handler"
-	"github.com/OscarYuen/go-graphql-starter/resolver"
-	"github.com/OscarYuen/go-graphql-starter/schema"
-	"github.com/OscarYuen/go-graphql-starter/service"
+	"context"
 	"log"
 	"net/http"
 
-	"github.com/OscarYuen/go-graphql-starter/loader"
+	gcontext "go-graphql-starter/context"
+	h "go-graphql-starter/handler"
+	loader "go-graphql-starter/loader"
+	resolver "go-graphql-starter/resolver"
+	schema "go-graphql-starter/schema"
+	service "go-graphql-starter/service"
+
 	graphql "github.com/graph-gophers/graphql-go"
-	"golang.org/x/net/context"
 )
 
 func main() {
