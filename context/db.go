@@ -2,10 +2,11 @@ package context
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
 	"log"
 	"time"
+
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func OpenDB(config *Config) (*sqlx.DB, error) {

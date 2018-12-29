@@ -2,8 +2,10 @@ package service
 
 import (
 	"database/sql"
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/jmoiron/sqlx"
+
+	model "go-graphql-starter/model"
+
+	sqlx "github.com/jmoiron/sqlx"
 	"github.com/op/go-logging"
 )
 

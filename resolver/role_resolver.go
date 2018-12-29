@@ -1,8 +1,9 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/graph-gophers/graphql-go"
+	model "go-graphql-starter/model"
+
+	graphql "github.com/graph-gophers/graphql-go"
 )
 
 type roleResolver struct {

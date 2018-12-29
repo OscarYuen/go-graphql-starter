@@ -1,10 +1,12 @@
 package resolver
 
 import (
-	"github.com/OscarYuen/go-graphql-starter/model"
-	"github.com/OscarYuen/go-graphql-starter/service"
+	"context"
+
+	model "go-graphql-starter/model"
+	service "go-graphql-starter/service"
+
 	"github.com/op/go-logging"
-	"golang.org/x/net/context"
 )
 
 func (r *Resolver) CreateUser(ctx context.Context, args *struct {
